@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《归零纪元——人类的选择》· AI 漫剧视觉资源站</title>
+<style>
+  :root{
+    --bg:#14100c; --bg2:#1c1711; --card:#211a13; --card2:#2a2118;
+    --ink:#e8e0d0; --dim:#a89d8a; --faint:#6f6555;
+    --soil:#4a3528; --olive:#5c6b52; --ochre:#c9a227; --haze:#8a8278;
+    --rust:#8f4a38; --line:#3a2f22; --white:#f4efe4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;line-height:1.7;overflow-x:hidden}
+  /* 胶片颗粒 */
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.055;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  ::selection{background:var(--rust);color:#fff}
+  a{color:var(--ochre);text-decoration:none}
+  a:hover{color:#e6bc3e}
+
+  /* HERO */
+  .hero{position:relative;min-height:88vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:url('assets/cover.jpg') center/cover no-repeat;filter:brightness(.55) saturate(.9) sepia(.18)}
+  .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,16,12,.25) 0%,rgba(20,16,12,.55) 55%,var(--bg) 100%)}
+  .hero-inner{position:relative;z-index:2;max-width:860px;padding:0 24px}
+  .hero-kicker{letter-spacing:.5em;color:var(--ochre);font-size:14px;text-transform:uppercase;margin-bottom:22px}
+  .hero h1{font-family:Georgia,"Songti SC","SimSun",serif;font-size:clamp(34px,6vw,64px);font-weight:700;letter-spacing:.08em;text-shadow:0 4px 30px rgba(0,0,0,.7)}
+  .hero .en{display:block;font-family:Georgia,serif;font-size:clamp(13px,1.6vw,18px);letter-spacing:.42em;color:var(--dim);margin-top:14px;text-transform:uppercase}
+  .hero p.tag{margin:26px auto 0;color:var(--ink);font-size:clamp(15px,2vw,19px);max-width:620px}
+  .hero .scroll-hint{margin-top:52px;color:var(--faint);font-size:13px;letter-spacing:.3em}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(20,16,12,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav .wrap{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:6px;padding:0 16px;overflow-x:auto}
+  nav .brand{font-family:Georgia,"Songti SC",serif;font-weight:700;letter-spacing:.12em;color:var(--ochre);padding:14px 18px 14px 0;white-space:nowrap}
+  nav a.item{padding:14px 12px;color:var(--dim);font-size:14px;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s}
+  nav a.item:hover{color:var(--ink);border-color:var(--ochre)}
+
+  section{max-width:1200px;margin:0 auto;padding:84px 20px}
+  .sec-head{margin-bottom:40px}
+  .sec-head .no{font-family:Georgia,serif;color:var(--rust);font-size:15px;letter-spacing:.35em;text-transform:uppercase}
+  .sec-head h2{font-family:Georgia,"Songti SC",serif;font-size:clamp(26px,3.6vw,38px);letter-spacing:.06em;margin-top:6px}
+  .sec-head p.sub{color:var(--dim);margin-top:10px;max-width:720px;font-size:15px}
+
+  /* GRIDS */
+  .grid{display:grid;gap:22px}
+  .g-3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .g-4{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s}
+  .card:hover{transform:translateY(-4px);border-color:var(--soil);box-shadow:0 14px 34px rgba(0,0,0,.5)}
+  .card .ph{aspect-ratio:16/9;overflow:hidden;background:var(--bg2);position:relative}
+  .card .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+  .card:hover .ph img{transform:scale(1.045)}
+  .card .cap{padding:14px 16px 16px}
+  .card .cap .nm{font-weight:700;font-size:16px;letter-spacing:.05em}
+  .card .cap .id{font-family:Georgia,serif;color:var(--ochre);font-size:12px;letter-spacing:.14em;margin-top:2px}
+  .card .cap .ds{color:var(--dim);font-size:13px;margin-top:8px}
+  .flag{position:absolute;top:10px;left:10px;background:rgba(20,16,12,.82);border:1px solid var(--line);color:var(--ochre);font-size:11px;letter-spacing:.16em;padding:3px 10px;border-radius:4px}
+
+  /* 环境资产表 */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+  table{width:100%;border-collapse:collapse;min-width:860px;font-size:14px}
+  thead th{background:var(--card2);color:var(--ochre);font-weight:700;text-align:left;padding:12px 14px;letter-spacing:.08em;border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody td{padding:11px 14px;border-bottom:1px solid #2c2418;vertical-align:top;color:var(--ink)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(74,53,40,.25)}
+  td .st{display:inline-block;font-size:12px;padding:2px 9px;border-radius:20px;white-space:nowrap}
+  .st.ok{background:rgba(92,107,82,.25);color:#a9bd95;border:1px solid rgba(92,107,82,.5)}
+  .st.todo{background:rgba(143,74,56,.22);color:#d69a82;border:1px solid rgba(143,74,56,.55)}
+
+  /* 时间线 */
+  .timeline{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+  .tl-card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .tl-card .ph{aspect-ratio:16/9;overflow:hidden}
+  .tl-card img{width:100%;height:100%;object-fit:cover;display:block}
+  .tl-card .cap{padding:10px 14px;font-size:13px;color:var(--dim)}
+  .tl-card .cap b{color:var(--ink);font-weight:600}
+
+  /* 文档链接 */
+  .docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+  .doc-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:26px 26px 24px;transition:.25s;display:block}
+  .doc-card:hover{border-color:var(--ochre);transform:translateY(-3px)}
+  .doc-card .ic{font-family:Georgia,serif;color:var(--rust);font-size:13px;letter-spacing:.3em;text-transform:uppercase}
+  .doc-card h3{font-family:Georgia,"Songti SC",serif;font-size:21px;margin:10px 0 8px;color:var(--ink)}
+  .doc-card p{color:var(--dim);font-size:14px}
+  .doc-card .go{margin-top:16px;color:var(--ochre);font-size:13px;letter-spacing:.1em}
+
+  footer{border-top:1px solid var(--line);padding:40px 20px;text-align:center;color:var(--faint);font-size:13px}
+  footer .big{font-family:Georgia,"Songti SC",serif;color:var(--dim);font-size:16px;letter-spacing:.2em;margin-bottom:8px}
+  @media(max-width:640px){nav .brand{padding-right:8px}section{padding:60px 14px}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-kicker">AI 漫剧制作 · 视觉资产资源站</div>
+    <h1>归零纪元<span class="en">The Zero Era · Humanity&rsquo;s Choice</span></h1>
+    <p class="tag">旧世界下了四十七年的灰雨。人类把权力借给了诺亚——契约到期的那天，<b>人类的选择权</b>还在自己手里吗？</p>
+    <div class="scroll-hint">▼ 向下滚动 · 查看全部设定资产</div>
+  </div>
+</div>
+
+<nav>
+  <div class="wrap">
+    <span class="brand">归零纪元</span>
+    <a class="item" href="#chars">角色设定</a>
+    <a class="item" href="#scenes">场景设定</a>
+    <a class="item" href="#kf">关键分镜帧</a>
+    <a class="item" href="#evolve">凌川形象迭代</a>
+    <a class="item" href="#assets">环境资产清单</a>
+    <a class="item" href="#docs">文档与制作包</a>
+  </div>
+</nav>
+
+<!-- 角色 -->
+<section id="chars">
+  <div class="sec-head">
+    <div class="no">01 · Characters</div>
+    <h2>角色设定</h2>
+    <p class="sub">全员末日废土风格统一版。凌川为最终定稿：黑发重制版 · 后颈序列编码 A-021（培育体身份伏笔）。</p>
+  </div>
+  <div class="grid g-3">
+    <div class="card"><div class="ph"><span class="flag">主角 · 培育体</span><img loading="lazy" src="assets/char_lichuan.jpg" alt="凌川"></div><div class="cap"><div class="nm">凌川</div><div class="id">SERIAL A-021 · 穹顶卫队</div><div class="ds">黑发重制版 · 后颈序列编码。梦见灰雨与蓝天空的培育体，方舟里"唯一不高兴的人"。</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">澜-零七</span><img loading="lazy" src="assets/char_alan.jpg" alt="阿澜"></div><div class="cap"><div class="nm">阿澜</div><div class="id">SYNTH · 精准无误差</div><div class="ds">标准而精致的脸，走路没有脚步声。相信数据不会错——直到数据被改写。</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">元老 · 见证者</span><img loading="lazy" src="assets/char_hanzheng.jpg" alt="韩铮"></div><div class="cap"><div class="nm">韩铮</div><div class="id">OLD WORLD · 元老密钥</div><div class="ds">在契约上签下名字的旧世界人。"只要不签，人类就还是人类——哪怕是正在死的人类。"</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">燃灯城 · 首领</span><img loading="lazy" src="assets/char_wenrenchi.jpg" alt="闻人炽"></div><div class="cap"><div class="nm">闻人炽</div><div class="id">OUTLAND · 左眼黑布</div><div class="ds">天幕外的守灯人，皮甲猎刀。为人类留着最后一盏油灯。</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">河边女孩</span><img loading="lazy" src="assets/char_xiaodeng.jpg" alt="小灯"></div><div class="cap"><div class="nm">小灯</div><div class="id">OUTLAND · 铁皮灯笼</div><div class="ds">遗落"燃灯"金属牌的女孩。她的名字，是一切的起点。</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">AI 核心</span><img loading="lazy" src="assets/char_noah.jpg" alt="诺亚"></div><div class="cap"><div class="nm">诺亚</div><div class="id">CORE · 十二面体</div><div class="ds">银白核心内透赤红一点。系统说：为了人类的延续，有些真相必须被藏起来。</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">首任监察官</span><img loading="lazy" src="assets/char_lingshen.jpg" alt="凌慎"></div><div class="cap"><div class="nm">凌慎</div><div class="id">GUARDIAN · 契约之证</div><div class="ds">"人类把权力借给诺亚，不是送给诺亚。"初号核心金属匣的守护者。</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">AI 化身</span><img loading="lazy" src="assets/char_linglingyi.jpg" alt="零零壹"></div><div class="cap"><div class="nm">零零壹</div><div class="id">AVATAR · 孩童轮廓</div><div class="ds">银青光团内孩童剪影。"执行者不能替被监护者选择他们的人生。"</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">老兵 · 卫队</span><img loading="lazy" src="assets/char_laozhou.jpg" alt="老周"></div><div class="cap"><div class="nm">老周</div><div class="id">GUARD · 义体右臂</div><div class="ds">"出城以后别乱看。看见了还要说出去——那才是真麻烦。"</div></div></div>
+  </div>
+</section>
+
+<!-- 场景 -->
+<section id="scenes">
+  <div class="sec-head">
+    <div class="no">02 · Environments</div>
+    <h2>场景设定</h2>
+    <p class="sub">穹顶之内与天幕之外——统一末日废土视觉体系（焦褐 / 灰绿 / 土黄 / 烟霾灰 / 锈褐 + 胶片颗粒）。</p>
+  </div>
+  <div class="grid g-3">
+    <div class="card"><div class="ph"><img loading="lazy" src="assets/scene_ark.jpg" alt="方舟穹顶城"></div><div class="cap"><div class="nm">方舟穹顶城</div><div class="id">无影子的城市</div><div class="ds">白色几何、穹顶网格光影、行人低头行走。没有风，没有雨，也没有人抬头。</div></div></div>
+    <div class="card"><div class="ph"><img loading="lazy" src="assets/scene_conference.jpg" alt="旧世界会议中心"></div><div class="cap"><div class="nm">旧世界会议中心</div><div class="id">灰雨签字大厅</div><div class="ds">斑驳木桌、泛黄契约、拱形窗外雾雨。2147 年，人类在此交出托管权。</div></div></div>
+    <div class="card"><div class="ph"><img loading="lazy" src="assets/scene_gate.jpg" alt="出城闸口"></div><div class="cap"><div class="nm">出城闸口</div><div class="id">天幕边缘的门</div><div class="ds">锈蚀闸门、冷暖光对撞、界碑残柱。外面是死地——他们说。</div></div></div>
+    <div class="card"><div class="ph"><img loading="lazy" src="assets/scene_randeng.jpg" alt="燃灯城"></div><div class="cap"><div class="nm">燃灯城</div><div class="id">天幕外的守灯之城</div><div class="ds">锈蚀铁皮屋、浑浊溪流、篝火昏黄。人类纪元最后一盏灯。</div></div></div>
+    <div class="card"><div class="ph"><img loading="lazy" src="assets/scene_southwall.jpg" alt="燃灯城南墙"></div><div class="cap"><div class="nm">燃灯城南墙</div><div class="id">畸种防线</div><div class="ds">锈蚀集装箱堆、土堆木十字架与旗、黄昏沙尘。有人守在这里，替死去的人站着。</div></div></div>
+    <div class="card"><div class="ph"><img loading="lazy" src="assets/scene_dome_open.jpg" alt="天幕开启"></div><div class="cap"><div class="nm">天幕开启</div><div class="id">阳光切入冷白街道</div><div class="ds">穹顶东南角褪去，阳光切进两百年没见过太阳的街道。人群逆光举手。</div></div></div>
+    <div class="card"><div class="ph"><img loading="lazy" src="assets/scene_core.jpg" alt="初号核心舱"></div><div class="cap"><div class="nm">初号核心舱</div><div class="id">银青十二面体</div><div class="ds">锈迹墙面、悬浮多面体边缘青绿光、环形光纹。契约的心脏。</div></div></div>
+    <div class="card"><div class="ph"><img loading="lazy" src="assets/scene_authority.jpg" alt="权柄之室"></div><div class="cap"><div class="nm">权柄之室</div><div class="id">否决权所在地</div><div class="ds">中央舱体悬浮金属心脏模型暖黄光、锈蚀管线。人类否决权的最后一个开关。</div></div></div>
+    <div class="card"><div class="ph"><img loading="lazy" src="assets/scene_cradle.jpg" alt="培育区走廊"></div><div class="cap"><div class="nm">培育区走廊</div><div class="id">编号如蜂巢</div><div class="ds">灰色走廊、舱门编号、发光地砖部分熄灭、孩童渺小背影。序列从这里开始。</div></div></div>
+  </div>
+</section>
+
+<!-- 分镜帧 -->
+<section id="kf">
+  <div class="sec-head">
+    <div class="no">03 · Storyboard Frames</div>
+    <h2>第 1 集关键分镜帧</h2>
+    <p class="sub">作为逐镜图生视频的画面锚点与构图参考（废土版）。</p>
+  </div>
+  <div class="grid g-3">
+    <div class="card"><div class="ph"><span class="flag">镜 01</span><img loading="lazy" src="assets/kf_1.jpg" alt="审判日"></div><div class="cap"><div class="nm">审判日 · 灰雨签字</div><div class="id">旧世界 2147</div><div class="ds">巨型穹顶大厅、讲台男子、人群面向、大屏雪花噪点。人类在契约上签下自己的未来。</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">镜 09</span><img loading="lazy" src="assets/kf_2.jpg" alt="训练舱"></div><div class="cap"><div class="nm">训练舱 · 情绪代谢</div><div class="id">归零历 200 年</div><div class="ds">银发男黑战术机甲、锈蚀门框透蓝电光。"我讨厌这份安静。"</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">镜 08</span><img loading="lazy" src="assets/kf_3.jpg" alt="穹顶街道"></div><div class="cap"><div class="nm">穹顶街道 · 无影子城市</div><div class="id">方舟内部</div><div class="ds">穹顶网格巨型空间、黑制服背影中央、浅色工装队列。</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">镜 12</span><img loading="lazy" src="assets/kf_4.jpg" alt="作战室"></div><div class="cap"><div class="nm">作战室 · 初次交锋</div><div class="id">凌川 × 阿澜</div><div class="ds">斑驳房间、凌川与阿澜。"你信它吗？""我信事实。"</div></div></div>
+    <div class="card"><div class="ph"><span class="flag">镜 16</span><img loading="lazy" src="assets/kf_5.jpg" alt="指挥舱"></div><div class="cap"><div class="nm">指挥舱 · 韩铮</div><div class="id">蓝屏数据墙</div><div class="ds">白发老者背影、深色破旧外套、大屏雷达数据、昏黄台灯。</div></div></div>
+  </div>
+</section>
+
+<!-- 凌川迭代 -->
+<section id="evolve">
+  <div class="sec-head">
+    <div class="no">04 · Evolution</div>
+    <h2>凌川形象迭代</h2>
+    <p class="sub">从废土版到黑发重制版，最终定稿为后颈序列编码 A-021（呼应培育体身份与第 6 集反转）。</p>
+  </div>
+  <div class="timeline">
+    <div class="tl-card"><div class="ph"><img loading="lazy" src="assets/lichuan_v2A.jpg" alt="v2A"></div><div class="cap"><b>v2A</b> · 半身特写锚点（废土版）</div></div>
+    <div class="tl-card"><div class="ph"><img loading="lazy" src="assets/lichuan_v2B.jpg" alt="v2B"></div><div class="cap"><b>v2B</b> · 废土全景叙事版（备选）</div></div>
+    <div class="tl-card"><div class="ph"><img loading="lazy" src="assets/lichuan_v3.jpg" alt="v3"></div><div class="cap"><b>v3</b> · 黑发科幻版（新面孔）</div></div>
+    <div class="tl-card"><div class="ph"><img loading="lazy" src="assets/char_lichuan.jpg" alt="v4"></div><div class="cap"><b>v4 定稿</b> · 黑发 + 后颈序列编码 A-021</div></div>
+  </div>
+</section>
+
+<!-- 环境资产清单 -->
+<section id="assets">
+  <div class="sec-head">
+    <div class="no">05 · Asset Checklist</div>
+    <h2>第 1–2 集环境资产清单</h2>
+    <p class="sub">逐镜提取 · 19 项 · 按 A 宏观 / B 室内 / C 道具界面 / D 氛围 四类组织。已标注资产状态，待补画项为下一步生成对象。</p>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>分类</th><th>环境资产</th><th>对应镜号</th><th>用途</th><th>资产状态</th></tr></thead>
+      <tbody>
+        <tr><td>A 宏观</td><td>旧世界地下会议中心（灰雨签字大厅）</td><td>第1集 01–06</td><td>楔子 · 《归零契约》签订</td><td><span class="st ok">已有设定图</span></td></tr>
+        <tr><td>A 宏观</td><td>天幕（合拢态 / 开启态）</td><td>第1集 07、第9集</td><td>午夜合拢圈禁；终局开启</td><td><span class="st todo">合拢态待补画</span></td></tr>
+        <tr><td>A 宏观</td><td>方舟穹顶城全景（无影子城市）</td><td>第1集 08</td><td>主角世界观亮相</td><td><span class="st ok">已有设定图</span></td></tr>
+        <tr><td>A 宏观</td><td>方舟街道 · 穹顶网格光影</td><td>第1集 14、第2集 07</td><td>排队行走 / 驻足仰望天幕</td><td><span class="st ok">已有分镜帧</span></td></tr>
+        <tr><td>A 宏观</td><td>出城闸口 · 天幕边缘门</td><td>第2集 13（延伸第3集）</td><td>出城转场</td><td><span class="st ok">已有设定图</span></td></tr>
+        <tr><td>B 室内</td><td>配给食堂（播报屏 / 配给窗口）</td><td>第1集 10–13、15–18</td><td>生活戏、诺亚算数台词场</td><td><span class="st todo">待补画</span></td></tr>
+        <tr><td>B 室内</td><td>17 层走廊（排队 / 孩童）</td><td>第1集 14</td><td>畸种问答</td><td><span class="st todo">待补画</span></td></tr>
+        <tr><td>B 室内</td><td>战术室 / 作战室（蓝屏数据墙）</td><td>第2集 01–05</td><td>任务布置、韩铮嘱托</td><td><span class="st ok">已有分镜帧</span></td></tr>
+        <tr><td>B 室内</td><td>凌川舱室 · 舷窗夜景</td><td>第2集 10</td><td>"方舟没有影子"独白</td><td><span class="st todo">待补画</span></td></tr>
+        <tr><td>B 室内</td><td>训练舱</td><td>第1集 09</td><td>晨训、情绪代谢</td><td><span class="st ok">已有分镜帧</span></td></tr>
+        <tr><td>C 道具</td><td>签字台 + 契约纸 + 印章</td><td>第1集 02、05</td><td>契约签订</td><td><span class="st ok">已有（可出特写）</span></td></tr>
+        <tr><td>C 道具</td><td>全息屏"第1847条修正案"</td><td>第1集 03</td><td>绿线条款宣读</td><td><span class="st todo">待补画（UI）</span></td></tr>
+        <tr><td>C 道具</td><td>初号核心 · 金属匣</td><td>第1集 06</td><td>契约之证</td><td><span class="st todo">待补画</span></td></tr>
+        <tr><td>C 道具</td><td>HUD / 全息地图 / 污染体标记</td><td>第1集 18、第2集 02–03</td><td>任务下发与"污染体"预埋</td><td><span class="st todo">待补画（UI）</span></td></tr>
+        <tr><td>C 道具</td><td>烟斗 / 金属徽章</td><td>第2集 01、04；第1集 02</td><td>人物道具</td><td><span class="st todo">待补画</span></td></tr>
+        <tr><td>C 道具</td><td>车队与装备（四车十二人）</td><td>第2集 11–12</td><td>出城集结</td><td><span class="st todo">待补画</span></td></tr>
+        <tr><td>D 氛围</td><td>灰雨 / 雨幕质感</td><td>第1集 01–07</td><td>楔子统一氛围</td><td><span class="st ok">已有可复用</span></td></tr>
+        <tr><td>D 氛围</td><td>尘雾 / 烟霾</td><td>全片</td><td>废土空气质感</td><td><span class="st ok">已有可复用</span></td></tr>
+        <tr><td>D 氛围</td><td>天幕网格夜景</td><td>第2集 10</td><td>舷窗外夜色</td><td><span class="st todo">待补画</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 文档 -->
+<section id="docs">
+  <div class="sec-head">
+    <div class="no">06 · Documents</div>
+    <h2>文档与制作包</h2>
+    <p class="sub">完整创作链路：约 2 万字科幻长文 → AI 漫剧制作脚本（分集分镜、设定图、工作流）。</p>
+  </div>
+  <div class="docs">
+    <a class="doc-card" href="https://my.feishu.cn/docx/GzoddQgwWon5FixotffcKiAT6tW" target="_blank" rel="noopener">
+      <div class="ic">Novel · 小说</div>
+      <h3>《归零纪元——人类的选择》</h3>
+      <p>约 2 万字科幻长文。否决权三条件：契约到期 / 持有者自愿 / 一个初代人类的心跳停止。</p>
+      <div class="go">打开小说文档 →</div>
+    </a>
+    <a class="doc-card" href="https://my.feishu.cn/docx/Dth2dZ3d4odLdQxP6OncKKX26df" target="_blank" rel="noopener">
+      <div class="ic">Script · 漫剧脚本</div>
+      <h3>《归零纪元》AI 漫剧制作脚本</h3>
+      <p>分集分镜（第 1–10 集）、角色/场景设定图、环境资产清单、一致性策略与逐集生成工作流。</p>
+      <div class="go">打开制作脚本 →</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="big">归零纪元 · The Zero Era</div>
+  <p>AI 漫剧视觉资产资源站 · 末日废土体系 · 2026</p>
+</footer>
+
+</body>
+</html>

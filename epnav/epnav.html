@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="use-iframe" content="true">
+<meta name="html-box-height-mode" content="auto">
+<meta name="description" content="归零纪元AI漫剧分集速览：第1-10集可折叠导航，每集分区展示分镜图、环境图、角色图与最终视频成品">
+<title>分集速览 · 资产导航</title>
+<style>
+  :root{
+    --bg:#14100c; --card:#1c1711; --card2:#211a13; --line:#3a2f22;
+    --ink:#e8e0d0; --dim:#a89d8a; --faint:#6f6555;
+    --ochre:#c9a227; --rust:#8f4a38; --olive:#5c6b52; --haze:#8a8278;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;line-height:1.6;width:100%;max-width:100%}
+  .wrap{width:100%;padding:18px 4px}
+  .top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .top h3{font-size:17px;letter-spacing:.1em;color:var(--ochre);font-weight:700}
+  .top .hint{font-size:12px;color:var(--faint)}
+  .ctl{font-size:12px;color:var(--haze);background:none;border:1px solid var(--line);border-radius:6px;padding:4px 12px;cursor:pointer;color:var(--dim)}
+  .ctl:hover{color:var(--ochre);border-color:var(--ochre)}
+  .eps{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 14px}
+  .ep-btn{font-size:13px;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--dim);cursor:pointer;transition:.18s;letter-spacing:.04em}
+  .ep-btn:hover{color:var(--ink);border-color:var(--soil,#4a3528)}
+  .ep-btn.on{background:rgba(201,162,39,.15);color:var(--ochre);border-color:rgba(201,162,39,.55);box-shadow:0 0 0 1px rgba(201,162,39,.25)}
+  .panel{display:none;border:1px solid var(--line);border-radius:10px;background:var(--card);overflow:hidden}
+  .panel.on{display:block}
+  .panel-head{padding:12px 16px;border-bottom:1px solid var(--line);background:var(--card2);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .panel-head .ep{font-family:Georgia,serif;color:var(--ochre);font-size:15px;letter-spacing:.08em;font-weight:700}
+  .panel-head .tt{font-size:14px;color:var(--ink)}
+  .panel-head .st{font-size:11px;color:var(--faint);margin-left:auto}
+  .secs{display:grid;gap:0}
+  .sec{border-bottom:1px solid var(--line);padding:12px 16px 14px}
+  .sec:last-child{border-bottom:none}
+  .sec .lab{font-size:12px;letter-spacing:.22em;color:var(--haze);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .sec .lab::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--rust);display:inline-block}
+  .imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:9px}
+  .imgs .it{position:relative;border-radius:7px;overflow:hidden;border:1px solid var(--line);cursor:zoom-in;background:var(--bg)}
+  .imgs .it img{width:100%;height:74px;object-fit:cover;display:block;transition:.25s}
+  .imgs .it:hover img{transform:scale(1.05)}
+  .imgs .it .nm{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.82));color:#e8e0d0;font-size:10px;padding:3px 6px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .empty{border:1px dashed var(--line);border-radius:7px;padding:12px;color:var(--faint);font-size:12px;text-align:center;background:var(--bg)}
+  .lbox{position:fixed;inset:0;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;z-index:999;cursor:zoom-out;flex-direction:column;gap:8px}
+  .lbox.on{display:flex}
+  .lbox img{max-width:92%;max-height:86%;border-radius:8px;border:1px solid var(--line)}
+  .lbox .fn{color:var(--dim);font-size:12px}
+  @media(max-width:560px){ .imgs{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))} .imgs .it img{height:60px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h3>分集速览 · 资产与成品导航</h3>
+    <span class="hint">点击集数展开 / 折叠该集分区：分镜图 · 环境图 · 角色图 · 视频成品</span>
+  </div>
+  <div class="eps" id="eps"></div>
+  <div class="ctl" id="ctlAll" onclick="toggleAll()">全部展开 / 收起</div>
+  <div id="panelHost"></div>
+</div>
+<div class="lbox" id="lbox" onclick="this.classList.remove('on')">
+  <img id="lboxImg" alt="预览"/>
+  <div class="fn" id="lboxFn"></div>
+</div>
+<script>
+var BASE = "https://henan-china.github.io/the-era-of-zeroing/assets/";
+var EPISODES = [
+  { no:"第 1 集", tt:"穹顶之下 · 上", shot:[["kf_1.jpg","镜01·审判日灰雨签字"],["kf_2.jpg","镜09·训练舱情绪代谢"],["kf_3.jpg","镜08·穹顶街道无影子"],["kf_4.jpg","镜12·作战室初次交锋"],["kf_5.jpg","镜16·指挥舱韩铮"]],
+    env:[["scene_conference.jpg","灰雨签字大厅"],["scene_ark.jpg","方舟穹顶城"],["scene_cradle.jpg","培育区走廊"]],
+    role:[["char_lichuan.jpg","凌川"],["char_noah.jpg","诺亚"],["char_linglingyi.jpg","零零壹"],["char_hanzheng.jpg","韩铮"],["char_alan.jpg","阿澜"],["char_laozhou.jpg","老周"]],
+    vid:[] },
+  { no:"第 2 集", tt:"穹顶之下 · 下", shot:[],
+    env:[["scene_gate.jpg","出城闸口"],["scene_authority.jpg","权柄之室"],["scene_core.jpg","初号核心舱"]],
+    role:[["char_lichuan.jpg","凌川"],["char_alan.jpg","阿澜"],["char_laozhou.jpg","老周"]], vid:[] },
+  { no:"第 3 集", tt:"出城", shot:[],
+    env:[["scene_gate.jpg","出城闸口"],["scene_randeng.jpg","燃灯城"]],
+    role:[["char_lichuan.jpg","凌川"],["char_wenrenchi.jpg","闻人炽"]], vid:[] },
+  { no:"第 4 集", tt:"燃灯城 · 上", shot:[],
+    env:[["scene_randeng.jpg","燃灯城"],["scene_southwall.jpg","燃灯城南墙"]],
+    role:[["char_wenrenchi.jpg","闻人炽"],["char_xiaodeng.jpg","小灯"]], vid:[] },
+  { no:"第 5 集", tt:"燃灯城 · 下", shot:[],
+    env:[["scene_southwall.jpg","燃灯城南墙"]],
+    role:[["char_xiaodeng.jpg","小灯"],["char_wenrenchi.jpg","闻人炽"]], vid:[] },
+  { no:"第 6 集", tt:"优生序列", shot:[],
+    env:[["scene_cradle.jpg","培育区走廊"]],
+    role:[["char_lichuan.jpg","凌川（反转核心）"]], vid:[] },
+  { no:"第 7 集", tt:"核心之核 · 上", shot:[],
+    env:[["scene_core.jpg","初号核心舱"]],
+    role:[["char_noah.jpg","诺亚"],["char_lingshen.jpg","凌慎"]], vid:[] },
+  { no:"第 8 集", tt:"核心之核 · 下", shot:[],
+    env:[["scene_core.jpg","初号核心舱"]],
+    role:[["char_noah.jpg","诺亚"],["char_lingshen.jpg","凌慎"]], vid:[] },
+  { no:"第 9 集", tt:"权柄之室", shot:[],
+    env:[["scene_authority.jpg","权柄之室"],["scene_dome_open.jpg","天幕开启"]],
+    role:[["char_hanzheng.jpg","韩铮"]], vid:[] },
+  { no:"第 10 集", tt:"人类纪元", shot:[],
+    env:[["scene_dome_open.jpg","天幕开启"]],
+    role:[["char_lichuan.jpg","凌川"],["char_hanzheng.jpg","韩铮"]], vid:[] }
+];
+var cur = 0;
+function sec(label, imgs){
+  var inner = imgs && imgs.length
+    ? '<div class="imgs">' + imgs.map(function(p){
+        return '<div class="it" onclick="openLb(\'' + BASE + p[0] + '\',\'' + (p[1]||'').replace(/'/g,"\\'") + '\')"><img loading="lazy" src="' + BASE + p[0] + '" alt="' + p[1] + '"><span class="nm">' + p[1] + '</span></div>';
+      }).join('') + '</div>'
+    : '<div class="empty">待制作 —— 本集该素材尚未产出，补画后自动填充</div>';
+  return '<div class="sec"><div class="lab">' + label + '</div>' + inner + '</div>';
+}
+function render(){
+  var eps = document.getElementById('eps');
+  eps.innerHTML = EPISODES.map(function(e,i){
+    return '<button class="ep-btn' + (i===cur?' on':'') + '" onclick="switchEp(' + i + ')">' + e.no + ' ' + e.tt + '</button>';
+  }).join('');
+  document.getElementById('panelHost').innerHTML = EPISODES.map(function(e,i){
+    return '<div class="panel' + (i===cur?' on':'') + '" id="panel' + i + '"><div class="panel-head"><span class="ep">' + e.no + '</span><span class="tt">《' + e.tt + '》</span><span class="st">' + (e.vid.length?'含成品视频':'待配音/合成') + '</span></div>' +
+      '<div class="secs">' + sec('分镜图', e.shot) + sec('环境图', e.env) + sec('角色图', e.role) + sec('最终视频成品', e.vid) + '</div></div>';
+  }).join('');
+}
+function switchEp(i){
+  cur = (cur === i ? -1 : i);
+  render();
+}
+function toggleAll(){
+  cur = -1;
+  render();
+}
+function openLb(src, fn){
+  document.getElementById('lboxImg').src = src;
+  document.getElementById('lboxFn').textContent = fn;
+  document.getElementById('lbox').classList.add('on');
+}
+render();
+</script>
+</body>
+</html>

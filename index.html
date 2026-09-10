@@ -144,6 +144,7 @@
     <a class="item" href="#progress">制作进度</a>
     <a class="item" href="#team">分工</a>
     <a class="item" href="#log">更新日志</a>
+    <a class="item" href="#videos">分镜视频</a>
     <a class="item" href="#gallery">最新素材</a>
     <a class="item" href="#docs">文档</a>
   </div>
@@ -226,9 +227,26 @@
   <div class="log" id="logList"></div>
 </section>
 
+<section id="videos">
+  <div class="sec-head">
+    <div class="no">10 · Videos</div>
+    <h2>分镜视频（预览与成片）</h2>
+    <p class="sub">两种接入方式，任选其一或并用：<b>A 本地视频</b>（≤100MB，推进 <code>assets/</code> 后页面直接播放）；<b>B 外链视频</b>（>100MB 或已在平台发布，填链接即可）。在 <code>content.js</code> 的 VIDEOS 里添加条目。</p>
+  </div>
+  <div class="grid g-3" id="vidGrid"></div>
+  <div class="guide" style="margin-top:26px">
+    <h3>▶ 怎么把视频放进来</h3>
+    <ol>
+      <li><b>本地视频（≤100MB）</b>：把文件发给管理员（或放到仓库 <code>assets/</code>），并在 <code>content.js</code> 的 VIDEOS 加一条 <code>{ ep, title, file: "文件名.mp4" }</code>；页面用播放器直接观看</li>
+      <li><b>外链视频（>100MB / 平台成片）</b>：先发布到 B 站、抖音等平台，复制链接，在 VIDEOS 加一条 <code>{ ep, title, ext: "https://…" }</code>；页面显示卡片，点击跳转平台观看</li>
+      <li>一条视频可以同时写 <code>file</code> 和 <code>ext</code>：页面既播放本地预览，也给出平台成片链接</li>
+    </ol>
+  </div>
+</section>
+
 <section id="gallery">
   <div class="sec-head">
-    <div class="no">10 · Auto Gallery</div>
+    <div class="no">11 · Auto Gallery</div>
     <h2>最新上传素材（自动归档）</h2>
     <p class="sub">此区自动生成，无需改任何代码：成员把图片上传到仓库 <code>assets/</code> 文件夹（传错到根目录也会被自动归位），约 1–2 分钟后自动出现在这里。点击图片可放大查看。</p>
   </div>
@@ -309,6 +327,24 @@
       '<div class="ic">' + d.tag + '</div><h3>' + d.title + '</h3><p>' + d.desc + '</p>' +
       '<div class="go">打开 →</div></a>';
   }).join('');
+
+  var vids = typeof VIDEOS !== 'undefined' ? VIDEOS : [];
+  var vidBox = document.getElementById('vidGrid');
+  if (!vids.length) {
+    vidBox.innerHTML = '<div style="color:var(--faint)">暂无视频。两种添加方式见下方说明：本地 ≤100MB 传 assets/ 播放，平台成片填外链跳转。</div>';
+  } else {
+    vidBox.innerHTML = vids.map(function(v){
+      if (v.file) {
+        var extLink = v.ext ? '<div class="ds" style="margin-top:6px"><a href="' + v.ext + '" target="_blank" rel="noopener">平台成片 ↗</a></div>' : '';
+        return '<div class="card"><div class="ph" style="background:#000"><video controls preload="metadata" playsinline style="width:100%;height:100%;object-fit:contain" src="assets/' + v.file + '"></video></div>' +
+          '<div class="cap"><div class="nm">' + v.title + '</div><div class="id">' + (v.ep||'') + ' · LOCAL</div>' +
+          (v.note ? '<div class="ds">' + v.note + '</div>' : '') + extLink + '</div></div>';
+      }
+      return '<a class="card" href="' + v.ext + '" target="_blank" rel="noopener" style="display:block"><div class="ph" style="background:var(--bg2);display:flex;align-items:center;justify-content:center"><span style="font-size:44px;color:var(--ochre)">▶</span></div>' +
+        '<div class="cap"><div class="nm">' + v.title + '</div><div class="id">' + (v.ep||'') + ' · EXTERNAL</div>' +
+        (v.note ? '<div class="ds">' + v.note + '</div>' : '') + '</div></a>';
+    }).join('');
+  }
 
   function openLightbox(src){
     var d = document.createElement('div');

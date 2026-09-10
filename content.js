@@ -158,3 +158,14 @@ var DOCS = [
   { href: "https://my.feishu.cn/docx/GzoddQgwWon5FixotffcKiAT6tW", tag: "Novel · 小说", title: "《归零纪元——人类的选择》", desc: "约 2 万字科幻长文。否决权三条件：契约到期 / 持有者自愿 / 一个初代人类的心跳停止。" },
   { href: "https://my.feishu.cn/docx/Dth2dZ3d4odLdQxP6OncKKX26df", tag: "Script · 漫剧脚本", title: "《归零纪元》AI 漫剧制作脚本", desc: "分集分镜（第 1–10 集）、角色/场景设定图、环境资产清单、一致性策略与逐集生成工作流。" }
 ];
+
+/* ---------------------- 11. 分镜视频 ----------------------
+ * 两种接入方式（每条二选一或同时使用）：
+ * A. 本地视频（≤100MB，由管理员用命令推送进 assets/，页面直接播放）：
+ *    { ep: "第 1 集", title: "镜 01 · 审判日", file: "ep1_shot01.mp4", note: "草稿预览" }
+ * B. 外链视频（>100MB 或已在平台发布，填 B 站/抖音等链接，页面跳转）：
+ *    { ep: "第 1 集", title: "镜 01 · 审判日", ext: "https://www.bilibili.com/video/BVxxxx", note: "成片" }
+ * 可同时给 file 和 ext：页面既播放本地版、也提供平台外链。
+ * 注意：文件在 assets/ 里，file 只写文件名；每条之间用逗号，最后一条不加。
+ * ------------------------------------------------------- */
+var VIDEOS = [];

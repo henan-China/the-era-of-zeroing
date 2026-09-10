@@ -42,6 +42,9 @@
   .imgs .it:hover img{transform:scale(1.05)}
   .imgs .it .nm{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.82));color:#e8e0d0;font-size:10px;padding:3px 6px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .empty{border:1px dashed var(--line);border-radius:7px;padding:12px;color:var(--faint);font-size:12px;text-align:center;background:var(--bg)}
+  .vid-it{border:1px solid var(--line);border-radius:7px;overflow:hidden;background:#000;margin-bottom:10px}
+  .vid-it video{width:100%;display:block;aspect-ratio:16/9;background:#000}
+  .vid-nm{padding:7px 10px;font-size:12px;color:var(--dim);background:var(--card2)}
   .lbox{position:fixed;inset:0;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;z-index:999;cursor:zoom-out;flex-direction:column;gap:8px}
   .lbox.on{display:flex}
   .lbox img{max-width:92%;max-height:86%;border-radius:8px;border:1px solid var(--line)}
@@ -69,7 +72,7 @@ var EPISODES = [
   { no:"第 1 集", tt:"穹顶之下 · 上", shot:[["kf_1.jpg","镜01·审判日灰雨签字"],["kf_2.jpg","镜09·训练舱情绪代谢"],["kf_3.jpg","镜08·穹顶街道无影子"],["kf_4.jpg","镜12·作战室初次交锋"],["kf_5.jpg","镜16·指挥舱韩铮"]],
     env:[["scene_conference.jpg","灰雨签字大厅"],["scene_ark.jpg","方舟穹顶城"],["scene_cradle.jpg","培育区走廊"]],
     role:[["char_lichuan.jpg","凌川"],["char_noah.jpg","诺亚"],["char_linglingyi.jpg","零零壹"],["char_hanzheng.jpg","韩铮"],["char_alan.jpg","阿澜"],["char_laozhou.jpg","老周"]],
-    vid:[] },
+    vid:[["ep1_final.mp4","第 1 集成品视频（在线播放）"]] },
   { no:"第 2 集", tt:"穹顶之下 · 下", shot:[],
     env:[["scene_gate.jpg","出城闸口"],["scene_authority.jpg","权柄之室"],["scene_core.jpg","初号核心舱"]],
     role:[["char_lichuan.jpg","凌川"],["char_alan.jpg","阿澜"],["char_laozhou.jpg","老周"]], vid:[] },
@@ -99,12 +102,19 @@ var EPISODES = [
     role:[["char_lichuan.jpg","凌川"],["char_hanzheng.jpg","韩铮"]], vid:[] }
 ];
 var cur = 0;
-function sec(label, imgs){
-  var inner = imgs && imgs.length
-    ? '<div class="imgs">' + imgs.map(function(p){
-        return '<div class="it" onclick="openLb(\'' + BASE + p[0] + '\',\'' + (p[1]||'').replace(/'/g,"\\'") + '\')"><img loading="lazy" src="' + BASE + p[0] + '" alt="' + p[1] + '"><span class="nm">' + p[1] + '</span></div>';
-      }).join('') + '</div>'
-    : '<div class="empty">待制作 —— 本集该素材尚未产出，补画后自动填充</div>';
+function sec(label, items, kind){
+  var inner;
+  if (!items || !items.length) {
+    inner = '<div class="empty">待制作 —— 本集该素材尚未产出，补画后自动填充</div>';
+  } else if (kind === 'vid') {
+    inner = items.map(function(p){
+      return '<div class="vid-it"><video controls preload="metadata" playsinline src="' + BASE + p[0] + '"></video><div class="vid-nm">' + p[1] + '</div></div>';
+    }).join('');
+  } else {
+    inner = '<div class="imgs">' + items.map(function(p){
+      return '<div class="it" onclick="openLb(\'' + BASE + p[0] + '\',\'' + (p[1]||'').replace(/'/g,"\\'") + '\')"><img loading="lazy" src="' + BASE + p[0] + '" alt="' + p[1] + '"><span class="nm">' + p[1] + '</span></div>';
+    }).join('') + '</div>';
+  }
   return '<div class="sec"><div class="lab">' + label + '</div>' + inner + '</div>';
 }
 function render(){
@@ -114,7 +124,7 @@ function render(){
   }).join('');
   document.getElementById('panelHost').innerHTML = EPISODES.map(function(e,i){
     return '<div class="panel' + (i===cur?' on':'') + '" id="panel' + i + '"><div class="panel-head"><span class="ep">' + e.no + '</span><span class="tt">《' + e.tt + '》</span><span class="st">' + (e.vid.length?'含成品视频':'待配音/合成') + '</span></div>' +
-      '<div class="secs">' + sec('分镜图', e.shot) + sec('环境图', e.env) + sec('角色图', e.role) + sec('最终视频成品', e.vid) + '</div></div>';
+      '<div class="secs">' + sec('分镜图', e.shot) + sec('环境图', e.env) + sec('角色图', e.role) + sec('最终视频成品', e.vid, 'vid') + '</div></div>';
   }).join('');
 }
 function switchEp(i){

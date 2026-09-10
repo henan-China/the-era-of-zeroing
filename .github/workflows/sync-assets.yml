@@ -1,0 +1,28 @@
+name: sync-assets
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 归位图片并生成素材清单
+        run: python3 .github/workflows/sync_assets.py
+
+      - name: 有变化则提交
+        run: |
+          git config user.name "assets-sync-bot"
+          git config user.email "actions@github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "no change, skip commit"
+          else
+            git commit -m "chore: auto-sync assets manifest [skip ci]"
+            git push origin main
+          fi

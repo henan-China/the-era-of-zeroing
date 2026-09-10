@@ -144,6 +144,7 @@
     <a class="item" href="#progress">制作进度</a>
     <a class="item" href="#team">分工</a>
     <a class="item" href="#log">更新日志</a>
+    <a class="item" href="#gallery">最新素材</a>
     <a class="item" href="#docs">文档</a>
   </div>
 </nav>
@@ -225,6 +226,15 @@
   <div class="log" id="logList"></div>
 </section>
 
+<section id="gallery">
+  <div class="sec-head">
+    <div class="no">10 · Auto Gallery</div>
+    <h2>最新上传素材（自动归档）</h2>
+    <p class="sub">此区自动生成，无需改任何代码：成员把图片上传到仓库 <code>assets/</code> 文件夹（传错到根目录也会被自动归位），约 1–2 分钟后自动出现在这里。点击图片可放大查看。</p>
+  </div>
+  <div class="grid g-3" id="galGrid"><div style="color:var(--dim)">正在读取素材清单…</div></div>
+</section>
+
 <section id="docs">
   <div class="sec-head">
     <div class="no">09 · Documents</div>
@@ -299,6 +309,27 @@
       '<div class="ic">' + d.tag + '</div><h3>' + d.title + '</h3><p>' + d.desc + '</p>' +
       '<div class="go">打开 →</div></a>';
   }).join('');
+
+  function openLightbox(src){
+    var d = document.createElement('div');
+    d.id = 'lb';
+    d.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;align-items:center;justify-content:center;cursor:zoom-out';
+    d.onclick = function(){ document.body.removeChild(d); };
+    d.innerHTML = '<img src="' + src + '" alt="素材预览" style="max-width:92vw;max-height:92vh;border-radius:8px;box-shadow:0 10px 50px rgba(0,0,0,.8)">';
+    document.body.appendChild(d);
+  }
+
+  fetch('assets-manifest.json').then(function(r){ return r.json(); }).then(function(list){
+    var box = document.getElementById('galGrid');
+    if (!list || !list.length) { box.innerHTML = '<div style="color:var(--faint)">暂无自动归档素材（把图片上传到仓库 assets/ 后自动出现）</div>'; return; }
+    box.innerHTML = list.map(function(m){
+      return '<div class="card"><div class="ph"><img loading="lazy" src="assets/' + m.file + '" alt="' + m.file + '" onclick="openLightbox(\'assets/' + m.file + '\')"></div>' +
+        '<div class="cap"><div class="nm" style="font-size:13px;word-break:break-all">' + m.file + '</div>' +
+        '<div class="id">AUTO · assets/</div></div></div>';
+    }).join('');
+  }).catch(function(){
+    document.getElementById('galGrid').innerHTML = '<div style="color:var(--faint)">素材清单尚未生成（自动任务首次运行后出现）</div>';
+  });
 })();
 </script>
 </body>

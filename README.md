@@ -15,6 +15,12 @@
 
 ## 小组更新步骤（全程浏览器，无需任何软件）
 
+### ✨ 传新图片（最简单：上传即自动上架）
+1. 打开仓库 → 进入 **`assets/`** 文件夹 → **Add file → Upload files** → 拖入图片 → Commit
+2. 仓库自动任务会把图片归位并登记，**约 1–2 分钟后**刷新页面，图片自动出现在页面底部"最新上传素材"区，**无需改任何代码**
+3. 想让它出现在"角色/场景"正式卡片里：再在 `content.js` 对应条目把 `img` 改成新文件名即可
+4. 图片建议：长边 1280px、JPG、16:9（与卡片一致）；传错到仓库根目录也会被自动移入 assets/
+
 ### 改文字内容
 1. 打开 https://github.com/henan-China/the-era-of-zeroing/blob/main/content.js
 2. 点右上角铅笔图标（Edit this file）
@@ -24,7 +30,7 @@
 
 ### 传新图片
 1. 打开仓库 `assets/` 文件夹 → **Add file → Upload files** → 拖入图片 → Commit
-2. 在 `content.js` 中把对应条目的 `img` 字段改成新文件名（如 `"new_pic.jpg"`）→ Commit
+2. 自动任务会把它登记到页面"最新上传素材"区；如需替换正式卡片图，在 `content.js` 中把对应条目的 `img` 字段改成新文件名（如 `"new_pic.jpg"`）→ Commit
 3. 建议图片：长边 1280px、JPG、宽高比 16:9（与现有卡片一致）
 
 ### 新增一条数据

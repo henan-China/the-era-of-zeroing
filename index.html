@@ -83,6 +83,23 @@
   .b2{background:rgba(143,74,56,.2);color:#d69a82;border:1px solid rgba(143,74,56,.5)}
   .b3{background:rgba(92,107,82,.25);color:#a9bd95;border:1px solid rgba(92,107,82,.5)}
 
+  .plots{display:grid;gap:18px}
+  .plot-card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .plot-card .p-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:16px 18px 10px;border-bottom:1px solid #2c2418}
+  .plot-card .p-no{font-family:Georgia,serif;color:var(--rust);font-size:13px;letter-spacing:.25em}
+  .plot-card h3{font-family:Georgia,"Songti SC",serif;font-size:21px;letter-spacing:.05em;margin:0}
+  .plot-card .p-ep{color:var(--dim);font-size:12px;margin-left:auto}
+  .plot-card .p-status{display:inline-block;margin:12px 18px 0;font-size:12px;color:#a9bd95;background:rgba(92,107,82,.2);border:1px solid rgba(92,107,82,.45);border-radius:20px;padding:3px 12px}
+  .plot-card ol.p-scenes{list-style:none;counter-reset:sc;padding:12px 18px 6px}
+  .plot-card ol.p-scenes li{position:relative;padding:8px 0 8px 34px;color:var(--ink);font-size:14px;border-bottom:1px dashed #2c2418}
+  .plot-card ol.p-scenes li:last-child{border-bottom:none}
+  .plot-card ol.p-scenes li::before{counter-increment:sc;content:counter(sc,decimal-leading-zero);position:absolute;left:0;top:9px;font-family:Georgia,serif;color:var(--ochre);font-size:13px;letter-spacing:.05em}
+  .plot-card .p-design{padding:6px 18px 12px;color:var(--dim);font-size:13px;line-height:1.75}
+  .plot-card .p-design::before{content:"立意 · ";color:var(--rust);font-weight:700;letter-spacing:.08em}
+  .plot-card .p-doc{padding:10px 18px 14px;border-top:1px solid #2c2418}
+  .plot-card .p-doc a{color:var(--ochre);font-size:13px;text-decoration:none;letter-spacing:.04em}
+  .plot-card .p-doc a:hover{text-decoration:underline}
+
   .members{display:grid;gap:12px}
   .mrow{display:grid;grid-template-columns:150px 130px 1fr;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 16px}
   .mrow .nm{font-weight:700}
@@ -142,6 +159,7 @@
     <a class="item" href="#evolve">凌川迭代</a>
     <a class="item" href="#assets">环境资产</a>
     <a class="item" href="#progress">制作进度</a>
+    <a class="item" href="#plots">支线剧情</a>
     <a class="item" href="#team">分工</a>
     <a class="item" href="#log">更新日志</a>
     <a class="item" href="#videos">分镜视频</a>
@@ -208,6 +226,15 @@
     <p class="sub">小组协作看板：每集状态、负责人、下一步。直接在 content.js 的 PROGRESS 里更新。</p>
   </div>
   <div class="prog" id="progList"></div>
+</section>
+
+<section id="plots">
+  <div class="sec-head">
+    <div class="no">06B · Plot Branch</div>
+    <h2>支线剧情</h2>
+    <p class="sub">用户审阅后并入剧本的支线单元：场景链 + 反转设计。完整台词与分镜在漫剧脚本中，点击卡片底部链接直达。</p>
+  </div>
+  <div class="plots" id="plotsList"></div>
 </section>
 
 <section id="team">
@@ -439,6 +466,16 @@
 
   document.getElementById('memberList').innerHTML = MEMBERS.map(function(m){
     return '<div class="mrow"><span class="nm">' + m.name + '</span><span class="role">' + m.role + '</span><span class="duty">' + m.duty + '</span></div>';
+  }).join('');
+
+  var plots = typeof PLOTS !== 'undefined' ? PLOTS : [];
+  document.getElementById('plotsList').innerHTML = plots.map(function(p){
+    return '<div class="plot-card"><div class="p-head"><span class="p-no">' + p.no + '</span><h3>' + p.title + '</h3><span class="p-ep">' + p.ep + '</span></div>' +
+      '<span class="p-status">' + p.status + '</span>' +
+      '<ol class="p-scenes">' + (p.scenes||[]).map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ol>' +
+      '<div class="p-design">' + p.design + '</div>' +
+      (p.doc ? '<div class="p-doc"><a href="' + p.doc + '" target="_blank" rel="noopener">漫剧脚本文档 · 查看完整剧情与台词 →</a></div>' : '') +
+      '</div>';
   }).join('');
 
   document.getElementById('logList').innerHTML = LOG.map(function(l){

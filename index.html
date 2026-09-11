@@ -100,6 +100,15 @@
   .plot-card .p-doc a{color:var(--ochre);font-size:13px;text-decoration:none;letter-spacing:.04em}
   .plot-card .p-doc a:hover{text-decoration:underline}
 
+  .music{display:grid;gap:10px}
+  .mrow-m{display:grid;grid-template-columns:92px 130px 1fr 150px;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px}
+  .mrow-m .m-no{font-family:Georgia,serif;color:var(--rust);letter-spacing:.1em;font-size:13px}
+  .mrow-m .m-name{font-weight:700}
+  .mrow-m .m-ep{color:var(--dim);font-size:13px}
+  .mrow-m .m-mood{color:var(--haze,#8a8278);font-size:12px;text-align:right}
+  .mrow-m audio{grid-column:1/-1;width:100%;height:34px;margin-top:2px}
+  @media(max-width:760px){.mrow-m{grid-template-columns:70px 110px 1fr}.mrow-m .m-mood{display:none}}
+
   .members{display:grid;gap:12px}
   .mrow{display:grid;grid-template-columns:150px 130px 1fr;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 16px}
   .mrow .nm{font-weight:700}
@@ -163,6 +172,7 @@
     <a class="item" href="#team">分工</a>
     <a class="item" href="#log">更新日志</a>
     <a class="item" href="#videos">分镜视频</a>
+    <a class="item" href="#music">配乐</a>
     <a class="item" href="#epsnav">分集速览</a>
     <a class="item" href="#gallery">最新素材</a>
     <a class="item" href="#docs">文档</a>
@@ -270,6 +280,15 @@
       <li>一条视频可以同时写 <code>file</code> 和 <code>ext</code>：页面既播放本地预览，也给出平台成片链接</li>
     </ol>
   </div>
+</section>
+
+<section id="music">
+  <div class="sec-head">
+    <div class="no">10A · Music</div>
+    <h2>配乐 BGM（在线试听）</h2>
+    <p class="sub">按剧情场景生成的原声配乐，共 9 首。点击播放器在线试听；曲目编号与漫剧分集/支线对应，直接在 content.js 的 MUSIC 里增删改。</p>
+  </div>
+  <div class="music" id="musicList"></div>
 </section>
 
 <section id="epsnav">
@@ -481,6 +500,13 @@
   document.getElementById('logList').innerHTML = LOG.map(function(l){
     return '<div class="lrow"><span class="dt">' + l.date + '</span><span class="who">' + l.who + '</span><div class="what">' + l.what + '</div></div>';
   }).join('');
+
+  var music = typeof MUSIC !== 'undefined' ? MUSIC : [];
+  document.getElementById('musicList').innerHTML = music.map(function(m){
+    return '<div class="mrow-m"><span class="m-no">' + m.no + '</span><span class="m-name">《' + m.name + '》</span>' +
+      '<span class="m-ep">' + m.ep + '</span><span class="m-mood">' + m.mood + '</span>' +
+      '<audio controls preload="none" src="' + m.url + '"></audio></div>';
+  }).join('') || '<div style="color:var(--faint)">暂无配乐，在 content.js 的 MUSIC 里添加。</div>';
 
   document.getElementById('docList').innerHTML = DOCS.map(function(d){
     return '<a class="doc-card" href="' + d.href + '" target="_blank" rel="noopener">' +

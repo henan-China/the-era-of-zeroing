@@ -149,6 +149,7 @@ var MEMBERS = [
  * what : 更新内容
  * ------------------------------------------------------- */
 var LOG = [
+  { date: "2026-09-11", who: "配乐组", what: "新增 9 首 BGM 配乐库（穹顶之下/燃灯/人群如潮水/破晓/灰雨审判日/出城/燃灯城/优生序列/心跳），网页新增「配乐」区可在线试听" },
   { date: "2026-09-10", who: "编剧组", what: "新增支线 B《方舟里的叛徒》：凌川被方舟群众误解的完整剧情（六场景 + 三层误解设计），已入漫剧脚本第 5 集后 / 第 6 集前；网页新增「支线剧情」区" },
   { date: "2026-09-10", who: "全员", what: "建立视觉资源站，同步 Gitee 与 GitHub Pages" },
   { date: "2026-09-10", who: "全员", what: "页面改为数据驱动结构，支持成员网页端自助更新" }
@@ -199,4 +200,23 @@ var PLOTS = [
     design: "三层误解：表层=群众视凌川为叛徒与瘟疫；中层=阿澜只信事实（行车日志看不见烟囱下的活人）；底层反转=真正被骗的是误解他的三百万群众，唯一看清真相的是一个被母亲捂住嘴的八岁孩子。立意=将误解从个人冤屈升华为圈养体制下集体丧失判断力的寓言，与全片「人类的选择」主题咬合。",
     doc: "https://feishu.doubao.com/docx/Dth2dZ3d4odLdQxP6OncKKX26df"
   }
+];
+
+/* ---------------------- 13. 配乐 BGM ----------------------
+ * no   : 曲目编号
+ * name : 曲名
+ * ep   : 对应剧情 / 场景
+ * mood : 情绪定位
+ * url  : 音频外链（WAV）
+ * ------------------------------------------------------- */
+var MUSIC = [
+  { no: "BGM-1", name: "穹顶之下", ep: "方舟内所有戏份", mood: "冷调秩序 · 压抑", url: "https://aka.doubaocdn.com/s/3fsUD4UvDS" },
+  { no: "BGM-2", name: "燃灯", ep: "支线 B · 希望主题", mood: "温暖 · 坚定", url: "https://aka.doubaocdn.com/s/UNb48EL6Qe" },
+  { no: "BGM-3", name: "人群如潮水", ep: "支线 B · 误解冲突", mood: "低气压 · 紧张", url: "https://aka.doubaocdn.com/s/iV5uNlESUB" },
+  { no: "BGM-4", name: "破晓", ep: "韩铮对话 / 天幕开启", mood: "黎明 · 释然", url: "https://aka.doubaocdn.com/s/bUOvORwlPz" },
+  { no: "BGM-5", name: "灰雨·审判日", ep: "第 1 集楔子 · 契约签订", mood: "悲壮 · 宿命", url: "https://aka.doubaocdn.com/s/YiOH2yLNeC" },
+  { no: "BGM-6", name: "出城", ep: "第 3 集 · 第一次呼吸", mood: "苍凉 · 辽远", url: "https://aka.doubaocdn.com/s/jAeBhUi8rS" },
+  { no: "BGM-7", name: "燃灯城", ep: "第 4-5 集 · 人间烟火", mood: "粗粝 · 温暖", url: "https://aka.doubaocdn.com/s/8Z7AynXej4" },
+  { no: "BGM-8", name: "优生序列", ep: "第 6 集 · 培育体反转", mood: "诡异 · 失重", url: "https://aka.doubaocdn.com/s/sVUhGZgnIx" },
+  { no: "BGM-9", name: "心跳", ep: "第 10 集 · 韩铮之死", mood: "悲壮 · 挽歌", url: "https://aka.doubaocdn.com/s/v7pRDiLQIv" }
 ];

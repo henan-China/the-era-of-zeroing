@@ -149,6 +149,7 @@ var MEMBERS = [
  * what : 更新内容
  * ------------------------------------------------------- */
 var LOG = [
+  { date: "2026-09-11", who: "配乐组", what: "配乐库扩至 17 首：新增 8 段双版本备选 BGM（天幕开启/核心之核/清剿令/重建新城 各 A/B 两版），与已有 9 首共同在线试听" },
   { date: "2026-09-11", who: "配乐组", what: "新增 9 首 BGM 配乐库（穹顶之下/燃灯/人群如潮水/破晓/灰雨审判日/出城/燃灯城/优生序列/心跳），网页新增「配乐」区可在线试听" },
   { date: "2026-09-10", who: "编剧组", what: "新增支线 B《方舟里的叛徒》：凌川被方舟群众误解的完整剧情（六场景 + 三层误解设计），已入漫剧脚本第 5 集后 / 第 6 集前；网页新增「支线剧情」区" },
   { date: "2026-09-10", who: "全员", what: "建立视觉资源站，同步 Gitee 与 GitHub Pages" },
@@ -218,5 +219,13 @@ var MUSIC = [
   { no: "BGM-6", name: "出城", ep: "第 3 集 · 第一次呼吸", mood: "苍凉 · 辽远", url: "https://aka.doubaocdn.com/s/jAeBhUi8rS" },
   { no: "BGM-7", name: "燃灯城", ep: "第 4-5 集 · 人间烟火", mood: "粗粝 · 温暖", url: "https://aka.doubaocdn.com/s/8Z7AynXej4" },
   { no: "BGM-8", name: "优生序列", ep: "第 6 集 · 培育体反转", mood: "诡异 · 失重", url: "https://aka.doubaocdn.com/s/sVUhGZgnIx" },
-  { no: "BGM-9", name: "心跳", ep: "第 10 集 · 韩铮之死", mood: "悲壮 · 挽歌", url: "https://aka.doubaocdn.com/s/v7pRDiLQIv" }
+  { no: "BGM-9", name: "心跳", ep: "第 10 集 · 韩铮之死", mood: "悲壮 · 挽歌", url: "https://aka.doubaocdn.com/s/v7pRDiLQIv" },
+  { no: "BGM-14", name: "天幕开启·弦乐钟声版", ep: "第 9 集 · 天幕开启（A 版）", mood: "宏大 · 希望", url: "https://aka.doubaocdn.com/s/VRmGvujUkJ" },
+  { no: "BGM-15", name: "天幕开启·钢琴哼鸣版", ep: "第 9 集 · 天幕开启（B 版）", mood: "抒情 · 动容", url: "https://aka.doubaocdn.com/s/pQoJyE884Z" },
+  { no: "BGM-16", name: "核心之核·冰冷电子版", ep: "第 7-8 集 · 核心之核真相（A 版）", mood: "惊悚 · 冰冷", url: "https://aka.doubaocdn.com/s/fVkott8Dej" },
+  { no: "BGM-17", name: "核心之核·弦乐滴答版", ep: "第 7-8 集 · 核心之核真相（B 版）", mood: "悬疑 · 压抑", url: "https://aka.doubaocdn.com/s/zht7tMYdwX" },
+  { no: "BGM-18", name: "清剿令·定音鼓进军版", ep: "第 5 集 · 清剿令（A 版）", mood: "压迫 · 进军", url: "https://aka.doubaocdn.com/s/CDt8W1QcRP" },
+  { no: "BGM-19", name: "清剿令·警报心跳版", ep: "第 5 集 · 清剿令（B 版）", mood: "紧张 · 倒计时", url: "https://aka.doubaocdn.com/s/B2q5Px6Xui" },
+  { no: "BGM-20", name: "重建新城·口琴木吉他版", ep: "第 10 集 · 重建新城（A 版）", mood: "人间烟火 · 温暖", url: "https://aka.doubaocdn.com/s/mVEtWccW9Z" },
+  { no: "BGM-21", name: "人类纪元·童声管弦版", ep: "第 10 集 · 人类纪元（B 版）", mood: "史诗 · 希望", url: "https://aka.doubaocdn.com/s/WtIbLUxG1d" }
 ];

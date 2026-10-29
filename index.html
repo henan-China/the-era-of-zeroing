@@ -89,20 +89,31 @@ button{font-family:inherit;cursor:pointer}
 .btn-gold:hover{transform:translateY(-2px)}
 .btn-ghost{border-color:var(--cream-40);color:var(--cream)}
 .btn-ghost:hover{background:rgba(245,240,232,.08)}
-/* 右栏：主视觉舞台（位置已定，内容留空） */
+/* 右栏：主视觉舞台（位置已定，内容留空 · 豆子式双手操控） */
 .hero-stage{
   position:relative;aspect-ratio:4/3;
   border:1px dashed rgba(196,169,107,.45);border-radius:8px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:9px;
+  padding-bottom:7%;
   background:radial-gradient(ellipse 50% 45% at 50% 42%,rgba(196,169,107,.08),transparent 70%);
   overflow:hidden;
 }
 .hero-stage::before,.hero-stage::after{content:"";position:absolute;width:9px;height:9px;border:1.5px solid rgba(196,169,107,.55);border-radius:2px}
 .hero-stage::before{top:9px;left:9px}
 .hero-stage::after{bottom:9px;right:9px}
-/* 丝线：从顶部垂入舞台，象征"牵引主视觉" */
+/* 双手模型：浮于舞台顶部，手指朝下，牵引丝线 */
+.hands-wrap{
+  position:absolute;top:-10%;left:50%;transform:translateX(-50%);
+  width:92%;z-index:4;pointer-events:none;
+  opacity:0;transition:opacity 1.1s ease .35s;
+}
+.hero-stage.in .hands-wrap{opacity:1}
+.hero-stage.active .hands-wrap{opacity:1}
+.hands-wrap img{width:100%;height:auto;animation:handsFloat 5.5s ease-in-out infinite}
+@keyframes handsFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+/* 丝线：从手底垂下，象征"牵引主视觉" */
 .stage-string{
-  position:absolute;top:0;width:1px;height:58%;
+  position:absolute;top:43%;width:1px;height:25%;
   background:linear-gradient(var(--gold-d),rgba(196,169,107,.25));
   transform-origin:top;
   opacity:0;transition:opacity 1s ease;
@@ -112,10 +123,10 @@ button{font-family:inherit;cursor:pointer}
 .hero-stage.active .stage-string::after{box-shadow:0 0 8px var(--gold)}
 .stage-string::after{content:"";position:absolute;bottom:0;left:-2px;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.9}
 .stage-string.s1{left:18%}
-.stage-string.s2{left:38%;height:70%}
-.stage-string.s3{left:50%;height:64%}
-.stage-string.s4{left:62%;height:70%}
-.stage-string.s5{left:82%;height:58%}
+.stage-string.s2{left:38%;height:28%}
+.stage-string.s3{left:50%;height:26%}
+.stage-string.s4{left:62%;height:28%}
+.stage-string.s5{left:82%}
 .hero-stage .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.5}
 .hero-stage .cap{font-size:11px;letter-spacing:.34em;color:var(--gold-d)}
 .hero-stage .hint{font-size:11px;color:var(--cream-40);letter-spacing:.08em}
@@ -282,6 +293,8 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   .reveal{opacity:1;transform:none;transition:none}
   .work-card,.ecom-card,.track{transition:none}
   .hero-scroll::after{animation:none}
+  .hands-wrap img{animation:none}
+  .hands-wrap,.stage-string{opacity:1}
 }
 </style>
 </head>
@@ -317,6 +330,9 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
       </div>
     </div>
     <div class="hero-stage reveal" id="heroStage" aria-hidden="true">
+      <div class="hands-wrap" id="handsWrap">
+        <img src="https://aka.doubaocdn.com/s/kfvm3uO6lm" alt="操控丝线的双手模型">
+      </div>
       <span class="stage-string s1"></span>
       <span class="stage-string s2"></span>
       <span class="stage-string s3"></span>
@@ -672,9 +688,10 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
     requestAnimationFrame(loop);
   })();
 
-  /* ===== 舞台丝线：呼吸 + 鼠标扰动（豆子式） ===== */
+  /* ===== 舞台丝线：呼吸 + 鼠标扰动（豆子式双手操控） ===== */
   var stage = document.getElementById("heroStage");
   var strings = document.querySelectorAll(".stage-string");
+  var handsWrap = document.getElementById("handsWrap");
   if(!reduce && stage && strings.length){
     var stageStrings = Array.prototype.slice.call(strings);
     var sway = 0;
@@ -686,6 +703,11 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         var perturb = ((curX / window.innerWidth) - .5) * 2.2;
         s.style.transform = "translateX(" + (breathe + perturb).toFixed(2) + "px)";
       });
+      if(handsWrap){
+        var hBreathe = Math.sin(sway * 1.2) * 5;
+        var hPerturb = ((curX / window.innerWidth) - .5) * 18;
+        handsWrap.style.transform = "translateX(calc(-50% + " + (hBreathe + hPerturb).toFixed(2) + "px))";
+      }
       requestAnimationFrame(stringLoop);
     })();
     stage.addEventListener("mouseenter", function(){ stage.classList.add("active"); });

@@ -58,7 +58,7 @@ button{font-family:inherit;cursor:pointer}
 .nav-cta:hover{background:var(--gold);color:#1E1B18}
 .nav-burger{display:none;background:none;border:0;color:var(--cream);font-size:22px}
 
-/* ============ Hero（进入图预留空位） ============ */
+/* ============ Hero（进入图预留空位 · 豆子式舞台骨架） ============ */
 .hero{
   position:relative;min-height:100vh;
   display:flex;flex-direction:column;justify-content:center;
@@ -73,6 +73,12 @@ button{font-family:inherit;cursor:pointer}
   background-image:linear-gradient(rgba(196,169,107,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(196,169,107,.05) 1px,transparent 1px);
   background-size:64px 64px;mask-image:radial-gradient(ellipse 70% 60% at 60% 40%,#000 30%,transparent 75%);
 }
+/* 舞台容器：左右两栏 */
+.hero-stage-wrap{
+  position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:5vw;align-items:center;width:100%;max-width:1180px;margin:0 auto;
+}
+/* 左栏：文案 */
 .hero-eyebrow{position:relative;font-size:12px;letter-spacing:.42em;color:var(--gold);margin-bottom:22px}
 .hero-title{position:relative;font-family:var(--serif);font-weight:700;font-size:clamp(40px,7.2vw,84px);line-height:1.14;letter-spacing:.02em}
 .hero-title em{font-style:normal;color:var(--gold)}
@@ -83,18 +89,36 @@ button{font-family:inherit;cursor:pointer}
 .btn-gold:hover{transform:translateY(-2px)}
 .btn-ghost{border-color:var(--cream-40);color:var(--cream)}
 .btn-ghost:hover{background:rgba(245,240,232,.08)}
-/* Hero 主视觉占位框：位置已定，内容留空 */
-.hero-frame{
-  position:absolute;right:6vw;top:50%;transform:translateY(-50%);
-  width:min(36vw,460px);aspect-ratio:4/3;
-  border:1px dashed rgba(196,169,107,.45);border-radius:6px;
+/* 右栏：主视觉舞台（位置已定，内容留空） */
+.hero-stage{
+  position:relative;aspect-ratio:4/3;
+  border:1px dashed rgba(196,169,107,.45);border-radius:8px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
   background:radial-gradient(ellipse 50% 45% at 50% 42%,rgba(196,169,107,.08),transparent 70%);
-  pointer-events:none;
+  overflow:hidden;
 }
-.hero-frame .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.5}
-.hero-frame .cap{font-size:11px;letter-spacing:.34em;color:var(--gold-d)}
-.hero-frame .hint{font-size:11px;color:var(--cream-40);letter-spacing:.08em}
+.hero-stage::before,.hero-stage::after{content:"";position:absolute;width:9px;height:9px;border:1.5px solid rgba(196,169,107,.55);border-radius:2px}
+.hero-stage::before{top:9px;left:9px}
+.hero-stage::after{bottom:9px;right:9px}
+/* 丝线：从顶部垂入舞台，象征"牵引主视觉" */
+.stage-string{
+  position:absolute;top:0;width:1px;height:58%;
+  background:linear-gradient(var(--gold-d),rgba(196,169,107,.25));
+  transform-origin:top;
+  opacity:0;transition:opacity 1s ease;
+}
+.hero-stage.in .stage-string{opacity:.8}
+.hero-stage.active .stage-string{opacity:1}
+.hero-stage.active .stage-string::after{box-shadow:0 0 8px var(--gold)}
+.stage-string::after{content:"";position:absolute;bottom:0;left:-2px;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.9}
+.stage-string.s1{left:18%}
+.stage-string.s2{left:38%;height:70%}
+.stage-string.s3{left:50%;height:64%}
+.stage-string.s4{left:62%;height:70%}
+.stage-string.s5{left:82%;height:58%}
+.hero-stage .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.5}
+.hero-stage .cap{font-size:11px;letter-spacing:.34em;color:var(--gold-d)}
+.hero-stage .hint{font-size:11px;color:var(--cream-40);letter-spacing:.08em}
 .hero-cursor{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:10;opacity:0;transition:opacity .3s}
 .hero-scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;color:var(--cream-40);display:flex;flex-direction:column;align-items:center;gap:8px}
 .hero-scroll::after{content:"";width:1px;height:34px;background:linear-gradient(var(--gold),transparent);animation:drip 2.2s ease-in-out infinite}
@@ -239,8 +263,8 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   .nav-links{display:none}
   .nav-burger{display:block}
   .nav-links.open{display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:rgba(30,27,24,.97);padding:20px 5vw;gap:16px;border-bottom:1px solid var(--line)}
-  .hero-frame{position:static;transform:none;width:100%;aspect-ratio:16/9;margin-top:40px}
-  .hero{min-height:92vh}
+  .hero-stage-wrap{grid-template-columns:1fr;gap:40px}
+  .hero{min-height:auto;padding-top:130px}
   .works-grid{grid-template-columns:1fr}
   .ecom-grid{grid-template-columns:repeat(2,1fr)}
   .ecom-card.wide{grid-column:auto}
@@ -279,20 +303,29 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   </button>
 </nav>
 
-<!-- ===== Hero ===== -->
+<!-- ===== Hero（进入图预留空位 · 豆子式舞台） ===== -->
 <header class="hero" id="hero">
   <div class="hero-grid" aria-hidden="true"></div>
-  <div class="hero-eyebrow">AIGC 视觉设计 · 编导创作</div>
-  <h1 class="hero-title">让每一个画面<br><em>拥有故事</em></h1>
-  <p class="hero-sub">以 AI 为笔、镜头为语，横跨 TVC 广告与电商视觉全链路。从概念、分镜到成片，为品牌完成可落地的视觉叙事。</p>
-  <div class="hero-actions">
-    <a href="#works" class="btn btn-gold">浏览作品</a>
-    <a href="#contact" class="btn btn-ghost">联系合作</a>
-  </div>
-  <div class="hero-frame" aria-hidden="true">
-    <span class="dot"></span>
-    <span class="cap">MAIN VISUAL</span>
-    <span class="hint">主视觉 · 位置已定 · 待补充</span>
+  <div class="hero-stage-wrap">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">AIGC 视觉设计 · 编导创作</div>
+      <h1 class="hero-title">让每一个画面<br><em>拥有故事</em></h1>
+      <p class="hero-sub">以 AI 为笔、镜头为语，横跨 TVC 广告与电商视觉全链路。从概念、分镜到成片，为品牌完成可落地的视觉叙事。</p>
+      <div class="hero-actions">
+        <a href="#works" class="btn btn-gold">浏览作品</a>
+        <a href="#contact" class="btn btn-ghost">联系合作</a>
+      </div>
+    </div>
+    <div class="hero-stage reveal" id="heroStage" aria-hidden="true">
+      <span class="stage-string s1"></span>
+      <span class="stage-string s2"></span>
+      <span class="stage-string s3"></span>
+      <span class="stage-string s4"></span>
+      <span class="stage-string s5"></span>
+      <span class="dot"></span>
+      <span class="cap">MAIN VISUAL</span>
+      <span class="hint">主视觉 · 位置已定 · 待补充</span>
+    </div>
   </div>
   <div class="hero-scroll" aria-hidden="true">SCROLL</div>
 </header>
@@ -638,6 +671,26 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
     if(heroHover){ dot.style.left = curX + "px"; dot.style.top = curY + "px"; }
     requestAnimationFrame(loop);
   })();
+
+  /* ===== 舞台丝线：呼吸 + 鼠标扰动（豆子式） ===== */
+  var stage = document.getElementById("heroStage");
+  var strings = document.querySelectorAll(".stage-string");
+  if(!reduce && stage && strings.length){
+    var stageStrings = Array.prototype.slice.call(strings);
+    var sway = 0;
+    (function stringLoop(){
+      sway += .04;
+      stageStrings.forEach(function(s, i){
+        var phase = sway + i * .9;
+        var breathe = Math.sin(phase) * 1.4;
+        var perturb = ((curX / window.innerWidth) - .5) * 2.2;
+        s.style.transform = "translateX(" + (breathe + perturb).toFixed(2) + "px)";
+      });
+      requestAnimationFrame(stringLoop);
+    })();
+    stage.addEventListener("mouseenter", function(){ stage.classList.add("active"); });
+    stage.addEventListener("mouseleave", function(){ stage.classList.remove("active"); });
+  }
 
   /* ===== 视频弹层 ===== */
   var modal = document.getElementById("videoModal");

@@ -256,6 +256,14 @@ section{position:relative;padding:96px 5vw}
 .modal-close svg{width:16px;height:16px}
 .modal-close:hover{background:var(--gold);color:#1E1B18;border-color:var(--gold)}
 .modal-title{position:absolute;bottom:-40px;left:0;font-family:var(--serif);font-size:15px;letter-spacing:.08em;color:var(--cream-60)}
+.modal-loading{
+  position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  background:#0E0C0A;border-radius:8px;z-index:2;
+}
+.modal-loading.show{display:flex}
+.modal-loading .spin{width:46px;height:46px;border-radius:50%;border:2px solid rgba(196,169,107,.25);border-top-color:var(--gold);animation:spin 1s linear infinite}
+.modal-loading .lt{position:absolute;bottom:16%;left:0;right:0;text-align:center;font-size:12px;letter-spacing:.14em;color:var(--cream-60)}
+@keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
 
 /* ============ 页脚 ============ */
@@ -421,7 +429,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
       <div class="works-grid">
         <!-- 伴它同行 -->
         <article class="work-card reveal d1" data-title="伴它同行 · 宠物救助公益 TVC">
-          <div class="work-media" data-video="https://aka.doubaocdn.com/s/JP4KD6H4ph">
+          <div class="work-media" data-video="https://aka.doubaocdn.com/s/R5LIxAD5gm">
             <img src="https://aka.doubaocdn.com/s/lTz3fQ8jag" alt="伴它同行公益TVC封面" loading="lazy">
             <div class="work-play"><span class="ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>
           </div>
@@ -434,7 +442,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         </article>
         <!-- Newsmy 储能 -->
         <article class="work-card reveal d2" data-title="Newsmy 储能电源 · 户外电源 TVC">
-          <div class="work-media" data-video="https://aka.doubaocdn.com/s/TzQf583UVK">
+          <div class="work-media" data-video="https://aka.doubaocdn.com/s/nsIVxIUXZ0">
             <img src="https://aka.doubaocdn.com/s/zRTegJyncS" alt="Newsmy储能电源TVC封面" loading="lazy">
             <div class="work-play"><span class="ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>
           </div>
@@ -447,7 +455,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         </article>
         <!-- 机械臂 -->
         <article class="work-card reveal d1" data-title="视界 ViewArm 灵臂 Pro · 显示器机械臂 TVC">
-          <div class="work-media" data-video="https://aka.doubaocdn.com/s/ti7fBwoaZA">
+          <div class="work-media" data-video="https://aka.doubaocdn.com/s/ng0aZuKUig">
             <img src="https://aka.doubaocdn.com/s/mRoyrvg6Tp" alt="视界ViewArm机械臂TVC封面" loading="lazy">
             <div class="work-play"><span class="ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>
           </div>
@@ -460,7 +468,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         </article>
         <!-- 青釉赋 -->
         <article class="work-card reveal d2" data-title="青釉赋 · 国风彩妆 TVC">
-          <div class="work-media" data-video="https://aka.doubaocdn.com/s/bnnO2KT9Fp">
+          <div class="work-media" data-video="https://aka.doubaocdn.com/s/knTRkeyFVm">
             <img src="https://aka.doubaocdn.com/s/bCgslst3nq" alt="青釉赋国风彩妆TVC封面" loading="lazy">
             <div class="work-play"><span class="ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>
           </div>
@@ -626,7 +634,8 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
 <div class="modal" id="videoModal" role="dialog" aria-modal="true" aria-label="视频播放">
   <div class="modal-box">
     <button class="modal-close" id="modalClose" aria-label="关闭"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-    <video id="modalVideo" controls preload="metadata" playsinline></video>
+    <div class="modal-loading" id="modalLoading"><div class="spin"></div><div class="lt">视频加载中 · 请稍候</div></div>
+    <video id="modalVideo" controls preload="none" playsinline></video>
     <div class="modal-title" id="modalTitle"></div>
   </div>
 </div>
@@ -785,18 +794,47 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   var video = document.getElementById("modalVideo");
   var modalTitle = document.getElementById("modalTitle");
   var closeBtn = document.getElementById("modalClose");
+  var loading = document.getElementById("modalLoading");
+  function showToast(msg){
+    var t = document.createElement("div");
+    t.style.cssText = "position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#1E1B18;color:#C4A96B;border:1px solid #C4A96B;border-radius:8px;padding:16px 28px;font-size:14px;z-index:1300;letter-spacing:.06em;box-shadow:0 10px 40px rgba(0,0,0,.5)";
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 2600);
+  }
   function openVideo(url, title){
-    video.src = url;
     modalTitle.textContent = title || "";
     modal.classList.add("open");
     document.body.style.overflow = "hidden";
-    video.play().catch(function(){});
+    loading.classList.add("show");
+    video.preload = "auto";
+    video.src = url;
+    video.load();
+    var started = false;
+    function go(){
+      if(started) return;
+      started = true;
+      loading.classList.remove("show");
+      video.play().catch(function(){});
+    }
+    video.addEventListener("canplay", go, {once:true});
+    video.addEventListener("canplaythrough", go, {once:true});
+    video.addEventListener("playing", function(){ loading.classList.remove("show"); }, {once:true});
+    video.addEventListener("error", function(){
+      if(started) return;
+      started = true;
+      loading.classList.remove("show");
+      showToast("视频加载失败，请检查网络后重试");
+    });
+    setTimeout(go, 6000);
   }
   function closeVideo(){
     modal.classList.remove("open");
+    loading.classList.remove("show");
     video.pause();
     video.removeAttribute("src");
     video.load();
+    video.preload = "none";
     document.body.style.overflow = "";
   }
   document.querySelectorAll(".work-media").forEach(function(wm){

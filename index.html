@@ -322,6 +322,22 @@ section{position:relative;padding:96px 5vw}
 .modal-close svg{width:16px;height:16px}
 .modal-close:hover{background:#111111;color:#FAFAF7;border-color:#111111}
 .modal-title{position:absolute;bottom:-40px;left:0;font-family:var(--serif);font-size:15px;letter-spacing:.08em;color:var(--cream-60)}
+/* 图片弹层：左右切换按钮（多图组，如开屏引导系列） */
+.img-nav{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:3;
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.4);background:rgba(17,17,17,.48);color:#ffffff;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all .25s;
+}
+.img-nav:hover{background:#111111;color:#FAFAF7;border-color:#111111}
+.img-nav svg{width:20px;height:20px}
+.img-nav-prev{left:12px}
+.img-nav-next{right:12px}
+.img-count{
+  position:absolute;top:-40px;right:56px;
+  font-family:var(--serif);font-size:13px;letter-spacing:.2em;color:var(--cream-60);
+}
 .modal-loading{
   position:absolute;inset:0;display:none;align-items:center;justify-content:center;
   background:#FAFAF7;border-radius:8px;z-index:2;
@@ -729,8 +745,11 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
 <div class="modal" id="imgModal" role="dialog" aria-modal="true" aria-label="图片查看">
   <div class="img-modal-box">
     <button class="modal-close" id="imgModalClose" aria-label="关闭"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <button class="img-nav img-nav-prev" id="imgNavPrev" aria-label="上一张" style="display:none"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <img id="modalImg" src="" alt="作品大图">
+    <button class="img-nav img-nav-next" id="imgNavNext" aria-label="下一张" style="display:none"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <div class="modal-title" id="imgModalTitle"></div>
+    <span class="img-count" id="imgCount"></span>
   </div>
 </div>
 
@@ -1016,47 +1035,95 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
     }
   });
 
-  /* ===== 图片弹层 ===== */
+  /* ===== 图片弹层（开屏引导支持组内左右切换） ===== */
   var imgModal = document.getElementById("imgModal");
   var modalImg = document.getElementById("modalImg");
   var imgModalTitle = document.getElementById("imgModalTitle");
   var imgModalClose = document.getElementById("imgModalClose");
-  function openImg(src, title){
-    modalImg.src = src;
-    imgModalTitle.textContent = title || "";
+  var imgNavPrev = document.getElementById("imgNavPrev");
+  var imgNavNext = document.getElementById("imgNavNext");
+  var imgCount = document.getElementById("imgCount");
+  var imgGroup = {items:[], idx:0};
+  /* 开屏引导三张组成一个可切换图组：车企商城 → 直播 App → 交友 App */
+  var splashCards = document.querySelectorAll('.ecom-card[data-cat="splash"]');
+  function splashGroupFor(card){
+    var items = [];
+    var idx = 0;
+    splashCards.forEach(function(c, k){
+      var img = c.querySelector(".e-media img");
+      var name = c.querySelector(".e-name");
+      items.push({
+        src: img ? (c.getAttribute("data-img") || img.getAttribute("src")) : "",
+        title: name ? name.textContent : ""
+      });
+      if(c === card){ idx = k; }
+    });
+    return {items: items, idx: idx};
+  }
+  function showImgAt(n){
+    var g = imgGroup;
+    if(!g.items.length) return;
+    n = (n + g.items.length) % g.items.length;
+    g.idx = n;
+    modalImg.src = g.items[n].src;
+    imgModalTitle.textContent = g.items[n].title || "";
+    imgCount.textContent = (n + 1) + " / " + g.items.length;
+    imgNavPrev.style.display = "";
+    imgNavNext.style.display = "";
+  }
+  function openImg(src, title, items, idx){
+    imgGroup.items = items || [];
+    imgGroup.idx = idx || 0;
+    if(imgGroup.items.length > 1){
+      showImgAt(imgGroup.idx);
+    } else {
+      modalImg.src = src;
+      imgModalTitle.textContent = title || "";
+      imgCount.textContent = "";
+      imgNavPrev.style.display = "none";
+      imgNavNext.style.display = "none";
+    }
     imgModal.classList.add("open");
     document.body.style.overflow = "hidden";
   }
   function closeImg(){
     imgModal.classList.remove("open");
     modalImg.removeAttribute("src");
+    imgGroup.items = [];
     document.body.style.overflow = "";
   }
+  function openCardImg(card){
+    var img = card.querySelector(".e-media img");
+    var name = card.querySelector(".e-name");
+    if(!img) return;
+    var src = img.getAttribute("src");
+    var big = card.getAttribute("data-img") || src;
+    if(card.getAttribute("data-cat") === "splash"){
+      var g = splashGroupFor(card);
+      openImg(big, name ? name.textContent : "", g.items, g.idx);
+    } else {
+      openImg(big, name ? name.textContent : "");
+    }
+  }
   document.querySelectorAll(".ecom-card").forEach(function(card){
-    card.addEventListener("click", function(){
-      var img = card.querySelector(".e-media img");
-      var name = card.querySelector(".e-name");
-      if(img){
-        var src = img.getAttribute("src");
-        var big = card.getAttribute("data-img") || src;
-        openImg(big, name ? name.textContent : "");
-      }
-    });
+    card.addEventListener("click", function(){ openCardImg(card); });
     card.addEventListener("keydown", function(e){
       if(e.key === "Enter" || e.key === " "){
         e.preventDefault();
-        var img = card.querySelector(".e-media img");
-        var name = card.querySelector(".e-name");
-        if(img){
-          var src = img.getAttribute("src");
-          var big = card.getAttribute("data-img") || src;
-          openImg(big, name ? name.textContent : "");
-        }
+        openCardImg(card);
       }
     });
   });
+  imgNavPrev.addEventListener("click", function(e){ e.stopPropagation(); showImgAt(imgGroup.idx - 1); });
+  imgNavNext.addEventListener("click", function(e){ e.stopPropagation(); showImgAt(imgGroup.idx + 1); });
   imgModalClose.addEventListener("click", closeImg);
   imgModal.addEventListener("click", function(e){ if(e.target === imgModal) closeImg(); });
+  document.addEventListener("keydown", function(e){
+    if(imgModal.classList.contains("open") && imgGroup.items.length > 1){
+      if(e.key === "ArrowLeft"){ e.preventDefault(); showImgAt(imgGroup.idx - 1); }
+      if(e.key === "ArrowRight"){ e.preventDefault(); showImgAt(imgGroup.idx + 1); }
+    }
+  });
 
   /* ===== 电商筛选 ===== */
   var filterBtns = document.querySelectorAll(".filter-btn");

@@ -600,9 +600,9 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         <button class="filter-btn" data-filter="flash">闪屏页</button>
       </div>
       <div class="ecom-grid" id="ecomGrid">
-        <figure class="ecom-card reveal" data-cat="splash" tabindex="0" role="button" aria-label="查看大图：车企商城 App 首启引导">
-          <div class="e-media"><img src="https://aka.doubaocdn.com/s/CarxDRmLXk" alt="汽车app开屏引导页" loading="lazy"></div>
-          <figcaption class="e-meta"><div class="e-name">车企商城 App 首启引导</div><div class="e-sub">开屏引导 · 深蓝 × 银光</div></figcaption>
+        <figure class="ecom-card reveal" data-cat="splash" tabindex="0" role="button" aria-label="查看大图：车企商城 App 首启引导" data-imgs='["https://aka.doubaocdn.com/s/wn3onHdnaV","https://aka.doubaocdn.com/s/2ER42VEWBA","https://aka.doubaocdn.com/s/NQKBQ9kD4g"]'>
+          <div class="e-media"><img src="https://aka.doubaocdn.com/s/wn3onHdnaV" alt="汽车app开屏引导页" loading="lazy"></div>
+          <figcaption class="e-meta"><div class="e-name">车企商城 App 首启引导</div><div class="e-sub">开屏引导 · 三页引导 · 立即体验 / 远程智控 / 官方商城</div></figcaption>
         </figure>
         <figure class="ecom-card reveal" data-cat="splash" tabindex="0" role="button" aria-label="查看大图：直播 App 开屏引导">
           <div class="e-media"><img src="https://aka.doubaocdn.com/s/btEcMulXe3" alt="直播app开屏引导页" loading="lazy"></div>
@@ -1044,21 +1044,14 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   var imgNavNext = document.getElementById("imgNavNext");
   var imgCount = document.getElementById("imgCount");
   var imgGroup = {items:[], idx:0};
-  /* 开屏引导三张组成一个可切换图组：车企商城 → 直播 App → 交友 App */
-  var splashCards = document.querySelectorAll('.ecom-card[data-cat="splash"]');
-  function splashGroupFor(card){
-    var items = [];
-    var idx = 0;
-    splashCards.forEach(function(c, k){
-      var img = c.querySelector(".e-media img");
-      var name = c.querySelector(".e-name");
-      items.push({
-        src: img ? (c.getAttribute("data-img") || img.getAttribute("src")) : "",
-        title: name ? name.textContent : ""
-      });
-      if(c === card){ idx = k; }
-    });
-    return {items: items, idx: idx};
+  /* 开屏引导系列：卡片通过 data-imgs 声明组内多张图，弹层左右切换 */
+  function parseImgsAttr(card){
+    var attr = card.getAttribute("data-imgs");
+    if(!attr) return null;
+    var list;
+    try{ list = JSON.parse(attr); }catch(e){ return null; }
+    if(!Array.isArray(list) || !list.length) return null;
+    return list;
   }
   function showImgAt(n){
     var g = imgGroup;
@@ -1098,9 +1091,12 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
     if(!img) return;
     var src = img.getAttribute("src");
     var big = card.getAttribute("data-img") || src;
-    if(card.getAttribute("data-cat") === "splash"){
-      var g = splashGroupFor(card);
-      openImg(big, name ? name.textContent : "", g.items, g.idx);
+    var urls = parseImgsAttr(card);
+    if(urls){
+      var items = urls.map(function(u){
+        return {src: u, title: name ? name.textContent : ""};
+      });
+      openImg(big, name ? name.textContent : "", items, 0);
     } else {
       openImg(big, name ? name.textContent : "");
     }

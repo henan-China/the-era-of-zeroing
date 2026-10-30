@@ -88,6 +88,12 @@ button{font-family:inherit;cursor:pointer}
 .hero-stage::before,.hero-stage::after{content:"";position:absolute;width:12px;height:12px;border:1.5px solid rgba(255,255,255,.5);border-radius:2px}
 .hero-stage::before{top:12px;left:12px}
 .hero-stage::after{bottom:12px;right:12px}
+/* 舞台演出实拍：最底层背景图，半透明融入霓虹舞台 */
+.stage-bg{
+  position:absolute;inset:0;z-index:0;
+  background:url("https://aka.doubaocdn.com/s/qTu0VStiMH") center 55%/cover no-repeat;
+  opacity:.45;pointer-events:none;
+}
 /* 霓虹舞台：多重光晕脉冲 */
 .neon-light{
   position:absolute;border-radius:50%;pointer-events:none;
@@ -401,6 +407,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
 <header class="hero" id="hero">
   <div class="hero-grid" aria-hidden="true"></div>
   <div class="hero-stage reveal" id="heroStage" aria-hidden="true">
+    <div class="stage-bg" aria-hidden="true"></div>
     <div class="neon-light n1"></div>
     <div class="neon-light n2"></div>
     <div class="neon-light n3"></div>

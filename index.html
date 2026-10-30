@@ -64,7 +64,7 @@ button{font-family:inherit;cursor:pointer}
 .nav-burger{display:none;background:none;border:0;color:#ffffff;font-size:22px}
 .nav.scrolled .nav-burger{color:var(--cream)}
 
-/* ============ Hero（全屏舞台 · 极简文字 · 手指牵引丝线） ============ */
+/* ============ Hero（进入图预留空位 · 豆子式全屏舞台 · 极简文字） ============ */
 .hero{
   position:relative;height:100vh;min-height:640px;
   padding:0;overflow:hidden;
@@ -892,8 +892,8 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         var w2 = Math.sin(phase + 1.1) * 1.1 * boost + pertPct * .6;
         var w3 = Math.sin(phase + 2.0) * 1.5 * boost + pertPct * .8;
         var ex = sx + w3 + act * (curXPct - sx) * .18;
-        // 丝线长度：角色头顶向指尖收近，约为原长度三分之二
-        var eyBase = sy + (eyFull - sy) * .667;
+        // 丝线长度：在当前 2/3 版基础上加长 2.5 倍（约为指尖—头顶基准距离的 1.667 倍）
+        var eyBase = sy + (eyFull - sy) * 1.667;
         var ey = eyBase + Math.sin(phase + 2.6) * .7;
         var c1y = sy + (ey - sy) * .42;
         var c2y = sy + (ey - sy) * .78;

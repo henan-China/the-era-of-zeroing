@@ -114,8 +114,7 @@ button{font-family:inherit;cursor:pointer}
 }
 .hero-stage.in .hero-figure{opacity:1}
 .hero-stage.active .hero-figure{opacity:1}
-.hero-figure img{height:100%;width:auto;animation:figureFloat 6s ease-in-out infinite}
-@keyframes figureFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.hero-figure img{height:100%;width:auto}
 .hero-scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;color:var(--cream-40);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:6}
 .hero-scroll::after{content:"";width:1px;height:34px;background:linear-gradient(var(--gold),transparent);animation:drip 2.2s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(0);transform-origin:bottom}}
@@ -798,6 +797,13 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         var hBreathe2 = Math.sin(sway * 1.2) * 5;
         var hPerturb2 = ((curX / window.innerWidth) - .5) * 18;
         handsWrap.style.transform = "translateX(calc(-50% + " + (hBreathe2 + hPerturb2).toFixed(2) + "px))";
+      }
+      /* 作品随丝线摆动：跟随手的整体摆动 + 轻微旋转，像被线悬吊 */
+      if(figure){
+        var figX = (hBreathe + hPerturb) * 0.85;
+        var figY = Math.sin(sway * 0.9) * 5;
+        var figR = Math.sin(sway * 1.1) * 1.1;
+        figure.style.transform = "translateX(calc(-50% + " + figX.toFixed(2) + "px)) translateY(" + figY.toFixed(2) + "px) rotate(" + figR.toFixed(2) + "deg)";
       }
       requestAnimationFrame(stringLoop);
     })();

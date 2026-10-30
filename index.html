@@ -173,11 +173,6 @@ button{font-family:inherit;cursor:pointer}
 .hero-fig img{height:100%;width:auto;
   filter:drop-shadow(0 10px 22px rgba(0,0,0,.55)) drop-shadow(0 0 12px rgba(8,243,221,.16));
 }
-.fig-name{
-  position:absolute;left:50%;top:calc(100% + 10px);transform:translateX(-50%);
-  font-size:11px;letter-spacing:.3em;color:rgba(255,255,255,.66);white-space:nowrap;
-  text-shadow:0 1px 6px rgba(0,0,0,.5);transition:color .25s;
-}
 .hero-scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;color:rgba(255,255,255,.55);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:6}
 .hero-scroll::after{content:"";width:1px;height:34px;background:linear-gradient(#ffffff,transparent);animation:drip 2.2s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(0);transform-origin:bottom}}
@@ -439,11 +434,11 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
     <span class="string-dot" style="left:56.5%;top:46%"></span>
     <span class="string-dot" style="left:63%;top:46%"></span>
     <div class="hero-figs">
-      <div class="hero-fig" data-i="0"><img src="https://aka.doubaocdn.com/s/7IcQc50zmM" alt="临川手办"><span class="fig-name">临川</span></div>
-      <div class="hero-fig" data-i="1"><img src="https://aka.doubaocdn.com/s/URHrO3BCuT" alt="小满手办"><span class="fig-name">小满</span></div>
-      <div class="hero-fig" data-i="2"><img src="https://aka.doubaocdn.com/s/tL2ijzun9k" alt="玄尘手办"><span class="fig-name">玄尘</span></div>
-      <div class="hero-fig" data-i="3"><img src="https://aka.doubaocdn.com/s/dFqsl5JtIr" alt="BOSS手办"><span class="fig-name">BOSS</span></div>
-      <div class="hero-fig" data-i="4"><img src="https://aka.doubaocdn.com/s/CuU4jgpdrG" alt="阿澜手办"><span class="fig-name">阿澜</span></div>
+      <div class="hero-fig" data-i="0"><img src="https://aka.doubaocdn.com/s/7IcQc50zmM" alt="临川手办"></div>
+      <div class="hero-fig" data-i="1"><img src="https://aka.doubaocdn.com/s/URHrO3BCuT" alt="小满手办"></div>
+      <div class="hero-fig" data-i="2"><img src="https://aka.doubaocdn.com/s/tL2ijzun9k" alt="玄尘手办"></div>
+      <div class="hero-fig" data-i="3"><img src="https://aka.doubaocdn.com/s/dFqsl5JtIr" alt="BOSS手办"></div>
+      <div class="hero-fig" data-i="4"><img src="https://aka.doubaocdn.com/s/CuU4jgpdrG" alt="阿澜手办"></div>
     </div>
   </div>
   <div class="hero-scroll" aria-hidden="true">SCROLL</div>
@@ -930,8 +925,6 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
           var targetR = Math.sin(sway + i * .7) * .3 + act * 1.2;
           fs.r += (targetR - fs.r) * .08;
           fig.style.transform = "translateX(-50%) rotate(" + fs.r.toFixed(2) + "deg)";
-          var nm = fig.querySelector(".fig-name");
-          if(nm){ nm.style.color = act > .55 ? "rgba(255,255,255,.95)" : ""; }
         }
       });
       if(handsWrap){

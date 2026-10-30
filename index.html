@@ -856,11 +856,6 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   function figHeight(){
     return window.innerWidth < 520 ? 16 : (window.innerWidth < 768 ? 18 : 20);
   }
-  /* 角色头顶（丝线终点）位置：指尖下方、舞台内 */
-  function headY(){
-    updateHandMetrics();
-    return Math.max(46, Math.min(hm.topPct + hm.hPct * 0.92, 76));
-  }
   if(!reduce && stage && strings.length){
     var stageStrings = Array.prototype.slice.call(strings);
     var sway = 0;
@@ -869,7 +864,10 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
     for(var fi = 0; fi < figures.length; fi++){ figState.push({x:50, y:46, r:0}); }
     (function stringLoop(){
       sway += .025;
-      var eyFull = headY();
+      // 每帧刷新手部几何（Hero 内相对坐标，滚动时不变）
+      updateHandMetrics();
+      var fhNow = figHeight();
+      var eyMax = 96 - fhNow;
       var hBreathe = Math.sin(sway * .8) * 3;
       var hPerturb = ((curX / window.innerWidth) - .5) * 10;
       var shiftPct = (hBreathe + hPerturb) / window.innerWidth * 100;
@@ -889,8 +887,9 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         var w2 = Math.sin(phase + 1.1) * 1.1 * boost + pertPct * .6;
         var w3 = Math.sin(phase + 2.0) * 1.5 * boost + pertPct * .8;
         var ex = sx + w3 + act * (curXPct - sx) * .18;
-        // 丝线长度：最初完整基准的 2 倍（= 当前 2/3 版系数的 3 倍）
-        var eyBase = sy + (eyFull - sy) * 2.0;
+        // 丝线长度：以手办高度为基准 1.6 倍（随视口/手办增大而变长，大屏不再显短），上限保证角色不出屏
+        var eyBase = sy + fhNow * 1.6;
+        if(eyBase > eyMax){ eyBase = eyMax; }
         var ey = eyBase + Math.sin(phase + 2.6) * .7;
         var c1y = sy + (ey - sy) * .42;
         var c2y = sy + (ey - sy) * .78;

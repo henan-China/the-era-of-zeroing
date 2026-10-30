@@ -50,13 +50,19 @@ button{font-family:inherit;cursor:pointer}
   transition:background .35s ease, padding .35s ease;
 }
 .nav.scrolled{background:rgba(250,250,247,.88);backdrop-filter:blur(10px);padding:12px 5vw;border-bottom:1px solid rgba(0,0,0,.12)}
-.nav-logo{font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.14em;color:var(--gold)}
+.nav-logo{font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.14em;color:#ffffff}
 .nav-links{display:flex;gap:26px;font-size:13px;letter-spacing:.06em}
-.nav-links a{color:var(--cream-60);transition:color .25s}
-.nav-links a:hover,.nav-links a.active{color:var(--gold)}
-.nav-cta{font-size:12px;letter-spacing:.1em;color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:7px 18px;transition:background .3s,color .3s}
-.nav-cta:hover{background:#111111;color:#FAFAF7}
-.nav-burger{display:none;background:none;border:0;color:var(--cream);font-size:22px}
+.nav-links a{color:rgba(255,255,255,.72);transition:color .25s}
+.nav-links a:hover,.nav-links a.active{color:#ffffff}
+.nav-cta{font-size:12px;letter-spacing:.1em;color:#ffffff;border:1px solid rgba(255,255,255,.85);border-radius:999px;padding:7px 18px;transition:background .3s,color .3s}
+.nav-cta:hover{background:#ffffff;color:#0a0e29}
+.nav.scrolled .nav-logo{color:var(--gold)}
+.nav.scrolled .nav-links a{color:var(--cream-60)}
+.nav.scrolled .nav-links a:hover,.nav.scrolled .nav-links a.active{color:var(--gold)}
+.nav.scrolled .nav-cta{color:var(--gold);border-color:var(--gold)}
+.nav.scrolled .nav-cta:hover{background:#111111;color:#FAFAF7}
+.nav-burger{display:none;background:none;border:0;color:#ffffff;font-size:22px}
+.nav.scrolled .nav-burger{color:var(--cream)}
 
 /* ============ Hero（进入图预留空位 · 豆子式全屏舞台 · 极简文字） ============ */
 .hero{
@@ -65,23 +71,73 @@ button{font-family:inherit;cursor:pointer}
 }
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;
   background:
-    radial-gradient(ellipse 60% 45% at 78% 30%,rgba(0,0,0,.07),transparent 65%),
-    radial-gradient(ellipse 40% 30% at 15% 75%,rgba(0,0,0,.04),transparent 60%);
+    radial-gradient(ellipse 70% 50% at 75% 28%,rgba(8,243,221,.14),transparent 60%),
+    radial-gradient(ellipse 50% 40% at 12% 78%,rgba(255,57,124,.10),transparent 55%);
 }
 .hero-grid{position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(rgba(0,0,0,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.06) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
   background-size:64px 64px;mask-image:radial-gradient(ellipse 70% 60% at 60% 40%,#000 30%,transparent 75%);
 }
-/* 主视觉舞台：占满整个画面 */
+/* 主视觉舞台：占满整个画面 · 霓虹舞台背景交互 */
 .hero-stage{
   position:absolute;inset:0;
-  border:1px solid rgba(0,0,0,.26);border-radius:0;
-  background:linear-gradient(#EFEFEB,#E9E9E4);
+  border:1px solid rgba(255,255,255,.14);border-radius:0;
+  background:radial-gradient(circle at 50% 55%,#2a346b 0%,#1e2659 34%,#0a0e29 72%);
   overflow:hidden;
 }
-.hero-stage::before,.hero-stage::after{content:"";position:absolute;width:12px;height:12px;border:1.5px solid rgba(0,0,0,.5);border-radius:2px}
+.hero-stage::before,.hero-stage::after{content:"";position:absolute;width:12px;height:12px;border:1.5px solid rgba(255,255,255,.5);border-radius:2px}
 .hero-stage::before{top:12px;left:12px}
 .hero-stage::after{bottom:12px;right:12px}
+/* 霓虹舞台：多重光晕脉冲 */
+.neon-light{
+  position:absolute;border-radius:50%;pointer-events:none;
+  animation:neonPulse 12s ease-in-out infinite alternate;
+}
+.neon-light.n1{width:180%;height:180%;top:-40%;left:-40%;
+  box-shadow:0 0 90px rgba(255,57,124,.28),0 0 140px rgba(246,185,59,.18),0 0 200px rgba(8,243,221,.22);
+}
+.neon-light.n2{width:150%;height:150%;top:-30%;left:-30%;
+  box-shadow:0 0 80px rgba(8,243,221,.24),0 0 150px rgba(126,34,206,.20);
+  animation-delay:-4s;
+}
+.neon-light.n3{width:120%;height:120%;top:-20%;left:-20%;
+  box-shadow:0 0 100px rgba(255,57,124,.20),0 0 160px rgba(8,243,221,.16);
+  animation-delay:-8s;
+}
+.neon-light.n4{width:90%;height:90%;top:-5%;left:-5%;
+  box-shadow:0 0 120px rgba(246,185,59,.16),0 0 180px rgba(126,34,206,.18);
+  animation-delay:-10s;
+}
+@keyframes neonPulse{
+  0%{opacity:.5;transform:scale(.98)}
+  50%{opacity:.85;transform:scale(1.02)}
+  100%{opacity:.6;transform:scale(1)}
+}
+/* 霓虹舞台：浮动粒子 */
+.stage-particles{position:absolute;inset:0;z-index:2;pointer-events:none}
+.particle{
+  position:absolute;border-radius:50%;
+  box-shadow:0 0 10px currentColor,0 0 20px currentColor;
+  opacity:0;animation:particleFloat 8s ease-in-out infinite;
+}
+@keyframes particleFloat{
+  0%{transform:translateY(12px);opacity:0}
+  18%{opacity:.7}
+  70%{opacity:.55}
+  100%{transform:translateY(-44px);opacity:0}
+}
+/* 霓虹舞台：旋转抽象结构线 */
+.stage-structure{
+  position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.55;
+}
+.stage-structure line{
+  stroke:rgba(255,255,255,.14);stroke-width:1.4;
+  transform-origin:center;animation:structureSpin 26s linear infinite;
+}
+.stage-structure line:nth-child(2){animation-duration:34s;animation-direction:reverse}
+.stage-structure line:nth-child(3){animation-duration:44s}
+.stage-structure line:nth-child(4){animation-duration:52s;animation-direction:reverse}
+@keyframes structureSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 /* 双手模型：浮于舞台顶部，放大至近全宽，指尖牵引丝线 */
 .hands-wrap{
   position:absolute;top:0;left:50%;transform:translateX(-50%);
@@ -90,7 +146,7 @@ button{font-family:inherit;cursor:pointer}
 }
 .hero-stage.in .hands-wrap{opacity:1}
 .hero-stage.active .hands-wrap{opacity:1}
-.hands-wrap img{width:100%;height:auto;filter:drop-shadow(0 26px 50px rgba(0,0,0,.30)) drop-shadow(0 6px 16px rgba(0,0,0,.18));animation:handsFloat 5.5s ease-in-out infinite}
+.hands-wrap img{width:100%;height:auto;filter:drop-shadow(0 26px 50px rgba(0,0,0,.5)) drop-shadow(0 6px 16px rgba(0,0,0,.35)) drop-shadow(0 0 26px rgba(8,243,221,.22));animation:handsFloat 5.5s ease-in-out infinite}
 @keyframes handsFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 /* 丝线：连接手指的贝塞尔曲线，随手动从上到下摆动 */
 .stage-strings{
@@ -100,23 +156,24 @@ button{font-family:inherit;cursor:pointer}
 .hero-stage.in .stage-strings{opacity:.85}
 .hero-stage.active .stage-strings{opacity:1}
 .stage-strings path{fill:none;stroke:url(#stringGrad);stroke-width:1.3;vector-effect:non-scaling-stroke}
-.hero-stage.active .stage-strings path{stroke:#111111}
+.hero-stage.active .stage-strings path{stroke:#ffffff}
 .string-dot{
-  position:absolute;width:5px;height:5px;border-radius:50%;background:#111111;
+  position:absolute;width:5px;height:5px;border-radius:50%;background:#ffffff;
+  box-shadow:0 0 6px rgba(8,243,221,.85);
   transform:translate(-50%,-50%);z-index:4;opacity:.9;pointer-events:none;
 }
 /* 主视觉：丝线牵引的角色立绘（灵川幸存者） */
 .hero-figure{
   position:absolute;left:50%;top:48%;transform:translateX(-50%);
   height:46vh;z-index:5;pointer-events:none;
-  filter:drop-shadow(0 10px 34px rgba(0,0,0,.22));
+  filter:drop-shadow(0 10px 34px rgba(0,0,0,.55));
   opacity:0;transition:opacity 1.1s ease .55s;
 }
 .hero-stage.in .hero-figure{opacity:1}
 .hero-stage.active .hero-figure{opacity:1}
 .hero-figure img{height:100%;width:auto}
-.hero-scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;color:rgba(17,17,17,.4);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:6}
-.hero-scroll::after{content:"";width:1px;height:34px;background:linear-gradient(#111111,transparent);animation:drip 2.2s ease-in-out infinite}
+.hero-scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;color:rgba(255,255,255,.55);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:6}
+.hero-scroll::after{content:"";width:1px;height:34px;background:linear-gradient(#ffffff,transparent);animation:drip 2.2s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ============ 第二屏：完整文案（原 Hero 文案迁入） ============ */
@@ -286,6 +343,8 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   .nav-links{display:none}
   .nav-burger{display:block}
   .nav-links.open{display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:rgba(250,250,247,.97);padding:20px 5vw;gap:16px;border-bottom:1px solid var(--line)}
+  .nav-links.open a{color:var(--cream-60)}
+  .nav-links.open a:hover,.nav-links.open a.active{color:var(--gold)}
   .hero{height:auto;min-height:100vh}
   .hands-wrap{top:0;width:108%}
   .hero-figure{top:46%;height:44vh}
@@ -313,6 +372,9 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   .hero-scroll::after{animation:none}
   .hands-wrap img{animation:none}
   .hands-wrap,.stage-strings,.string-dot,.hero-figure{opacity:1}
+  .neon-light,.particle,.stage-structure line{animation:none}
+  .neon-light{opacity:.7}
+  .particle{opacity:.6}
 }
 </style>
 </head>
@@ -338,14 +400,25 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
 <header class="hero" id="hero">
   <div class="hero-grid" aria-hidden="true"></div>
   <div class="hero-stage reveal" id="heroStage" aria-hidden="true">
+    <div class="neon-light n1"></div>
+    <div class="neon-light n2"></div>
+    <div class="neon-light n3"></div>
+    <div class="neon-light n4"></div>
+    <div class="stage-particles" id="stageParticles"></div>
+    <svg class="stage-structure" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <line x1="50" y1="0" x2="50" y2="100"/>
+      <line x1="0" y1="50" x2="100" y2="50"/>
+      <line x1="8" y1="8" x2="92" y2="92"/>
+      <line x1="92" y1="8" x2="8" y2="92"/>
+    </svg>
     <div class="hands-wrap" id="handsWrap">
       <img src="https://aka.doubaocdn.com/s/Do1H2t8ygG" alt="操控丝线的双手模型">
     </div>
     <svg class="stage-strings" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <linearGradient id="stringGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#444444"/>
-          <stop offset="1" stop-color="rgba(17,17,17,.35)"/>
+          <stop offset="0" stop-color="#cfd8ff"/>
+          <stop offset="1" stop-color="rgba(170,225,255,.45)"/>
         </linearGradient>
       </defs>
       <path class="ss" d="M27.1 43.9 C 29.5 45, 31 45.9, 37 46.5"/>
@@ -688,6 +761,28 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
     revealEls.forEach(function(el){ io.observe(el); });
   } else {
     revealEls.forEach(function(el){ el.classList.add("in"); });
+  }
+
+  /* ===== 霓虹舞台：浮动粒子 ===== */
+  var particleBox = document.getElementById("stageParticles");
+  if(particleBox){
+    var pColors = ["#08fddd","#a855f7","#ff397c","#f6b93b"];
+    var pCount = window.innerWidth < 768 ? 55 : 110;
+    var i, p, size;
+    for(i=0;i<pCount;i++){
+      p = document.createElement("span");
+      p.className = "particle";
+      size = Math.random()*3.5+1.5;
+      p.style.width = size + "px";
+      p.style.height = size + "px";
+      p.style.left = (Math.random()*100) + "%";
+      p.style.top = (18 + Math.random()*72) + "%";
+      p.style.color = pColors[i % pColors.length];
+      p.style.background = "currentColor";
+      p.style.animationDelay = (Math.random()*9) + "s";
+      p.style.animationDuration = (6 + Math.random()*9) + "s";
+      particleBox.appendChild(p);
+    }
   }
 
   /* ===== 作品卡片 3D tilt ===== */

@@ -64,7 +64,7 @@ button{font-family:inherit;cursor:pointer}
 .nav-burger{display:none;background:none;border:0;color:#ffffff;font-size:22px}
 .nav.scrolled .nav-burger{color:var(--cream)}
 
-/* ============ Hero（进入图预留空位 · 豆子式全屏舞台 · 极简文字） ============ */
+/* ============ Hero（全屏舞台 · 极简文字 · 手指牵引丝线） ============ */
 .hero{
   position:relative;height:100vh;min-height:640px;
   padding:0;overflow:hidden;
@@ -867,39 +867,49 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   if(!reduce && stage && strings.length){
     var stageStrings = Array.prototype.slice.call(strings);
     var sway = 0;
+    // 角色手办状态：位置与旋转用缓动滞后模拟重量感
+    var figState = [];
+    for(var fi = 0; fi < figures.length; fi++){ figState.push({x:50, y:46, r:0}); }
     (function stringLoop(){
-      sway += .04;
-      var eyBase = headY();
-      var hBreathe = Math.sin(sway * 1.2) * 5;
-      var hPerturb = ((curX / window.innerWidth) - .5) * 18;
+      sway += .025;
+      var eyFull = headY();
+      var hBreathe = Math.sin(sway * .8) * 3;
+      var hPerturb = ((curX / window.innerWidth) - .5) * 10;
       var shiftPct = (hBreathe + hPerturb) / window.innerWidth * 100;
-      var pertPct = ((curX / window.innerWidth) - .5) * 2.2;
+      var pertPct = ((curX / window.innerWidth) - .5) * 1.2;
       var curXPct = (curX / window.innerWidth) * 100;
       stageStrings.forEach(function(p, i){
         var b = fingerBase[i];
         var sx = 50 - hm.wPct / 2 + b.fx * hm.wPct + shiftPct;
         var sy = hm.topPct + hm.hPct * b.fyv;
-        var phase = sway + i * .9;
-        // 鼠标分区：靠近哪条线，哪条线被激活（振幅增强 + 向鼠标轻微牵引）
+        var phase = sway + i * .7;
+        // 鼠标分区：靠近哪条线，哪条线被激活（振幅小幅增强 + 向鼠标轻微牵引）
         var dist = Math.abs(curXPct - sx);
         var act = Math.max(0, 1 - dist / 11);
-        var boost = 1 + act * 2.6;
-        // 从上到下摆动：控制点振幅逐级放大，形成软绳波浪；激活线更明显
-        var w1 = Math.sin(phase) * 1.6 * boost * .7 + pertPct * .8;
-        var w2 = Math.sin(phase + 1.1) * 2.3 * boost + pertPct * 1.2;
-        var w3 = Math.sin(phase + 2.0) * 3.0 * boost + pertPct * 1.6;
-        var ex = sx + w3 + act * (curXPct - sx) * .3;
-        var ey = eyBase + Math.sin(phase + 2.6) * 1.4;
+        var boost = 1 + act * 1.6;
+        // 摆动幅度约为原版一半，控制点振幅逐级放大形成软绳波浪
+        var w1 = Math.sin(phase) * .8 * boost * .7 + pertPct * .4;
+        var w2 = Math.sin(phase + 1.1) * 1.1 * boost + pertPct * .6;
+        var w3 = Math.sin(phase + 2.0) * 1.5 * boost + pertPct * .8;
+        var ex = sx + w3 + act * (curXPct - sx) * .18;
+        // 丝线长度：角色头顶向指尖收近，约为原长度三分之二
+        var eyBase = sy + (eyFull - sy) * .667;
+        var ey = eyBase + Math.sin(phase + 2.6) * .7;
         var c1y = sy + (ey - sy) * .42;
         var c2y = sy + (ey - sy) * .78;
+        // 角色位置缓动滞后于线末端：重物慢半拍
+        var fs = figState[i];
+        fs.x += (ex - fs.x) * .10;
+        fs.y += (ey - fs.y) * .10;
+        // 丝线终点跟随角色实际位置，保持线始终连着手办
         p.setAttribute("d", "M" + sx.toFixed(2) + " " + sy.toFixed(2) +
           " C " + (sx + w1).toFixed(2) + " " + c1y.toFixed(2) +
           ", " + (sx + w2).toFixed(2) + " " + c2y.toFixed(2) +
-          ", " + ex.toFixed(2) + " " + ey.toFixed(2));
+          ", " + fs.x.toFixed(2) + " " + fs.y.toFixed(2));
         if(act > .55){ p.style.stroke = "rgba(255,255,255,.95)"; } else { p.style.stroke = ""; }
         if(stringDots[i]){
-          stringDots[i].style.left = ex + "%";
-          stringDots[i].style.top = (ey - .8) + "%";
+          stringDots[i].style.left = fs.x + "%";
+          stringDots[i].style.top = (fs.y - .8) + "%";
           if(act > .55){
             stringDots[i].style.background = "#ffffff";
             stringDots[i].style.boxShadow = "0 0 10px rgba(8,243,221,.95), 0 0 18px rgba(8,243,221,.6)";
@@ -908,23 +918,23 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
             stringDots[i].style.boxShadow = "";
           }
         }
-        // 角色手办：悬挂在各自丝线末端，随线摆动，被激活时呼应
+        // 角色手办：缓慢跟随、小幅回摆，被激活时轻微呼应
         var fig = figures[i];
         if(fig){
           var fh = figHeight();
           if(fig.style.height !== fh + "vh") fig.style.height = fh + "vh";
-          fig.style.left = ex + "%";
-          fig.style.top = ey + "%";
-          var fr = Math.sin(sway + i * .7) * .6 + act * 2.2;
-          var fy = Math.sin(sway * .9 + i * .5) * 3;
-          fig.style.transform = "translateX(-50%) translateY(" + fy.toFixed(2) + "px) rotate(" + fr.toFixed(2) + "deg)";
+          fig.style.left = fs.x + "%";
+          fig.style.top = fs.y + "%";
+          var targetR = Math.sin(sway + i * .7) * .3 + act * 1.2;
+          fs.r += (targetR - fs.r) * .08;
+          fig.style.transform = "translateX(-50%) rotate(" + fs.r.toFixed(2) + "deg)";
           var nm = fig.querySelector(".fig-name");
           if(nm){ nm.style.color = act > .55 ? "rgba(255,255,255,.95)" : ""; }
         }
       });
       if(handsWrap){
-        var hBreathe2 = Math.sin(sway * 1.2) * 5;
-        var hPerturb2 = ((curX / window.innerWidth) - .5) * 18;
+        var hBreathe2 = Math.sin(sway * .8) * 3;
+        var hPerturb2 = ((curX / window.innerWidth) - .5) * 10;
         handsWrap.style.transform = "translateX(calc(-50% + " + (hBreathe2 + hPerturb2).toFixed(2) + "px))";
       }
       requestAnimationFrame(stringLoop);

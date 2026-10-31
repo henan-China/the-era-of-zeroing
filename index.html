@@ -314,7 +314,25 @@ section{position:relative;padding:96px 5vw}
 .modal-box{width:min(92vw,960px);position:relative;animation:pop .35s cubic-bezier(.22,1,.36,1)}
 .modal-box video{width:100%;max-height:82vh;background:#000;border-radius:8px;outline:1px solid var(--line)}
 .img-modal-box{width:min(94vw,1200px);position:relative;animation:pop .35s cubic-bezier(.22,1,.36,1)}
-.img-modal-box img{width:100%;max-height:86vh;object-fit:contain;background:#FAFAF7;border-radius:8px;outline:1px solid var(--line)}
+.img-viewport{position:relative;overflow:hidden;border-radius:8px;outline:1px solid var(--line);background:#FAFAF7;cursor:grab;touch-action:none}
+.img-viewport img{width:100%;max-height:86vh;object-fit:contain;display:block;transform-origin:0 0;-webkit-user-select:none;user-select:none}
+.img-viewport.dragging{cursor:grabbing}
+.img-viewport img.zoom-anim{transition:transform .08s ease-out}
+/* 图片弹层：缩放控制条 */
+.img-zoom-bar{
+  position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+  display:flex;align-items:center;gap:2px;z-index:4;
+  background:rgba(17,17,17,.72);border:1px solid rgba(255,255,255,.25);border-radius:999px;
+  padding:5px 8px;backdrop-filter:blur(6px);
+}
+.img-zoom-btn{
+  width:34px;height:34px;border-radius:50%;border:0;background:transparent;color:#ffffff;
+  display:flex;align-items:center;justify-content:center;transition:background .2s;
+}
+.img-zoom-btn:hover{background:rgba(255,255,255,.16)}
+.img-zoom-btn svg{width:16px;height:16px}
+.img-zoom-bar .z-sep{width:1px;height:18px;background:rgba(255,255,255,.22);margin:0 3px}
+.img-zoom-bar .z-tip{font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,.7);padding:0 8px;white-space:nowrap}
 .modal-close{
   position:absolute;top:-48px;right:0;width:42px;height:42px;border-radius:50%;
   border:1px solid var(--cream-40);background:transparent;color:var(--cream);
@@ -755,10 +773,19 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   <div class="img-modal-box">
     <button class="modal-close" id="imgModalClose" aria-label="关闭"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     <button class="img-nav img-nav-prev" id="imgNavPrev" aria-label="上一张" style="display:none"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <img id="modalImg" src="" alt="作品大图">
+    <div class="img-viewport" id="imgViewport">
+      <img id="modalImg" src="" alt="作品大图">
+    </div>
     <button class="img-nav img-nav-next" id="imgNavNext" aria-label="下一张" style="display:none"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <div class="modal-title" id="imgModalTitle"></div>
     <span class="img-count" id="imgCount"></span>
+    <div class="img-zoom-bar" id="imgZoomBar">
+      <button class="img-zoom-btn" id="imgZoomOut" aria-label="缩小"><svg viewBox="0 0 24 24"><path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button class="img-zoom-btn" id="imgZoomReset" aria-label="重置缩放"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 1 2.3 5.7M4 12v-5M4 12h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="img-zoom-btn" id="imgZoomIn" aria-label="放大"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <span class="z-sep"></span>
+      <span class="z-tip">滚轮 / 双击缩放 · 拖拽平移</span>
+    </div>
   </div>
 </div>
 
@@ -1053,6 +1080,109 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   var imgNavNext = document.getElementById("imgNavNext");
   var imgCount = document.getElementById("imgCount");
   var imgGroup = {items:[], idx:0};
+  /* 图片弹层：缩放与平移查看（详情页长图可放大看细节） */
+  var imgViewport = document.getElementById("imgViewport");
+  var imgZoomIn = document.getElementById("imgZoomIn");
+  var imgZoomOut = document.getElementById("imgZoomOut");
+  var imgZoomReset = document.getElementById("imgZoomReset");
+  var imgZoom = {s:1, tx:0, ty:0};
+  function resetImgZoom(){
+    imgZoom.s = 1; imgZoom.tx = 0; imgZoom.ty = 0;
+    modalImg.style.transform = "";
+    modalImg.classList.remove("zoom-anim");
+  }
+  function applyImgZoom(anim){
+    if(anim){ modalImg.classList.add("zoom-anim"); }
+    if(imgZoom.s <= 1){
+      imgZoom.s = 1; imgZoom.tx = 0; imgZoom.ty = 0;
+      modalImg.style.transform = "";
+      return;
+    }
+    modalImg.style.transform = "translate(" + imgZoom.tx.toFixed(2) + "px," + imgZoom.ty.toFixed(2) + "px) scale(" + imgZoom.s.toFixed(3) + ")";
+  }
+  function zoomAt(cx, cy, factor){
+    var vRect = imgViewport.getBoundingClientRect();
+    var imgRect = modalImg.getBoundingClientRect();
+    var px = imgRect.width ? (cx - imgRect.left) / imgRect.width : .5;
+    var py = imgRect.height ? (cy - imgRect.top) / imgRect.height : .5;
+    var ns = Math.min(8, Math.max(1, imgZoom.s * factor));
+    if(ns <= 1){ resetImgZoom(); return; }
+    imgZoom.tx = (cx - vRect.left) - px * vRect.width * ns;
+    imgZoom.ty = (cy - vRect.top) - py * vRect.height * ns;
+    imgZoom.s = ns;
+    applyImgZoom(true);
+  }
+  /* 滚轮缩放：以光标为中心 */
+  imgViewport.addEventListener("wheel", function(e){
+    e.preventDefault();
+    zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.25 : .8);
+  }, {passive:false});
+  /* 双击：1x 与 2.5x 之间切换 */
+  imgViewport.addEventListener("dblclick", function(e){
+    if(imgZoom.s > 1){ resetImgZoom(); }
+    else { zoomAt(e.clientX, e.clientY, 2.5); }
+  });
+  /* 鼠标拖拽平移（放大后） */
+  var drag = null;
+  imgViewport.addEventListener("mousedown", function(e){
+    if(e.button !== 0 || imgZoom.s <= 1) return;
+    drag = {sx:e.clientX, sy:e.clientY, tx:imgZoom.tx, ty:imgZoom.ty};
+    imgViewport.classList.add("dragging");
+    e.preventDefault();
+  });
+  window.addEventListener("mousemove", function(e){
+    if(!drag) return;
+    imgZoom.tx = drag.tx + (e.clientX - drag.sx);
+    imgZoom.ty = drag.ty + (e.clientY - drag.sy);
+    applyImgZoom(false);
+  });
+  window.addEventListener("mouseup", function(){
+    if(!drag) return;
+    drag = null;
+    imgViewport.classList.remove("dragging");
+  });
+  /* 触屏：单指平移 + 双指捏合缩放 */
+  var touch = null;
+  imgViewport.addEventListener("touchstart", function(e){
+    if(e.touches.length === 1){
+      touch = {mode:"pan", sx:e.touches[0].clientX, sy:e.touches[0].clientY, tx:imgZoom.tx, ty:imgZoom.ty};
+    } else if(e.touches.length === 2){
+      var t1 = e.touches[0], t2 = e.touches[1];
+      touch = {mode:"pinch", d:Math.hypot(t2.clientX-t1.clientX, t2.clientY-t1.clientY), s:imgZoom.s, cx:(t1.clientX+t2.clientX)/2, cy:(t1.clientY+t2.clientY)/2};
+    }
+  }, {passive:true});
+  imgViewport.addEventListener("touchmove", function(e){
+    if(!touch) return;
+    e.preventDefault();
+    if(touch.mode === "pan"){
+      imgZoom.tx = touch.tx + (e.touches[0].clientX - touch.sx);
+      imgZoom.ty = touch.ty + (e.touches[0].clientY - touch.sy);
+      applyImgZoom(false);
+    } else if(e.touches.length === 2){
+      var t1 = e.touches[0], t2 = e.touches[1];
+      var d = Math.hypot(t2.clientX-t1.clientX, t2.clientY-t1.clientY);
+      var ns = Math.min(8, Math.max(1, touch.s * (d / touch.d)));
+      if(ns <= 1){ resetImgZoom(); touch.s = 1; return; }
+      var r = imgViewport.getBoundingClientRect();
+      var imgRect = modalImg.getBoundingClientRect();
+      var cx = (t1.clientX+t2.clientX)/2, cy = (t1.clientY+t2.clientY)/2;
+      var px = imgRect.width ? (cx - imgRect.left) / imgRect.width : .5;
+      var py = imgRect.height ? (cy - imgRect.top) / imgRect.height : .5;
+      imgZoom.tx = (cx - r.left) - px * r.width * ns;
+      imgZoom.ty = (cy - r.top) - py * r.height * ns;
+      imgZoom.s = ns;
+      applyImgZoom(false);
+    }
+  }, {passive:false});
+  imgViewport.addEventListener("touchend", function(){ touch = null; }, {passive:true});
+  /* 缩放控制按钮 */
+  function zoomCenter(factor){
+    var r = imgViewport.getBoundingClientRect();
+    zoomAt(r.left + r.width / 2, r.top + r.height / 2, factor);
+  }
+  imgZoomIn.addEventListener("click", function(e){ e.stopPropagation(); zoomCenter(1.5); });
+  imgZoomOut.addEventListener("click", function(e){ e.stopPropagation(); zoomCenter(1 / 1.5); });
+  imgZoomReset.addEventListener("click", function(e){ e.stopPropagation(); resetImgZoom(); });
   /* 开屏引导系列：卡片通过 data-imgs 声明组内多张图，弹层左右切换 */
   function parseImgsAttr(card){
     var attr = card.getAttribute("data-imgs");
@@ -1072,6 +1202,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
     imgCount.textContent = (n + 1) + " / " + g.items.length;
     imgNavPrev.style.display = "";
     imgNavNext.style.display = "";
+    resetImgZoom();
   }
   function openImg(src, title, items, idx){
     imgGroup.items = items || [];
@@ -1084,6 +1215,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
       imgCount.textContent = "";
       imgNavPrev.style.display = "none";
       imgNavNext.style.display = "none";
+      resetImgZoom();
     }
     imgModal.classList.add("open");
     document.body.style.overflow = "hidden";
@@ -1092,6 +1224,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
     imgModal.classList.remove("open");
     modalImg.removeAttribute("src");
     imgGroup.items = [];
+    resetImgZoom();
     document.body.style.overflow = "";
   }
   function openCardImg(card){

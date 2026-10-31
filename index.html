@@ -227,6 +227,29 @@ section{position:relative;padding:96px 5vw}
 .track.soon{border-style:dashed;background:transparent}
 .track.soon:hover{border-color:var(--gray);background:rgba(0,0,0,.04)}
 
+/* ============ 叙事长片：真人剧 / 漫剧 ============ */
+.drama-block{margin-bottom:46px}
+.drama-block:last-child{margin-bottom:0}
+.d-block-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.d-block-no{font-size:11px;letter-spacing:.28em;color:var(--gold-d)}
+.d-block-title{font-family:var(--serif);font-size:22px;letter-spacing:.05em}
+.drama-grid{display:grid;gap:18px}
+.drama-grid.d3{grid-template-columns:repeat(3,1fr)}
+.drama-grid.d4{grid-template-columns:repeat(4,1fr)}
+.drama-card{
+  position:relative;border-radius:10px;overflow:hidden;display:block;
+  border:1px solid var(--line);background:var(--bg2);
+  transition:box-shadow .35s,transform .3s;
+}
+.drama-card:hover{box-shadow:0 16px 40px rgba(0,0,0,.16);transform:translateY(-4px)}
+.d-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:#EFEFEA}
+.d-media img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.drama-card:hover .d-media img{transform:scale(1.05)}
+.d-meta{padding:14px 16px 16px}
+.d-meta .d-kind{font-size:10px;letter-spacing:.22em;color:var(--gold);display:block;margin-bottom:6px}
+.d-meta h3{font-family:var(--serif);font-size:17px;letter-spacing:.04em;margin-bottom:2px}
+.d-meta .d-sub{font-size:11px;color:var(--cream-60);letter-spacing:.04em}
+
 /* ============ TVC 作品区 ============ */
 .works-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
 .work-card{
@@ -270,19 +293,6 @@ section{position:relative;padding:96px 5vw}
 .ecom-card .e-meta{padding:14px 16px 16px}
 .ecom-card .e-name{font-size:14px;letter-spacing:.04em}
 .ecom-card .e-sub{font-size:11px;color:var(--cream-40);margin-top:3px;letter-spacing:.06em}
-
-/* ============ 留空区 ============ */
-.blank-row{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.blank-card{
-  border:1px dashed rgba(0,0,0,.24);border-radius:10px;
-  padding:56px 30px;text-align:center;background:rgba(0,0,0,.02);
-  transition:border-color .3s,background .3s;
-}
-.blank-card:hover{border-color:var(--gray);background:rgba(0,0,0,.05)}
-.blank-card .b-no{font-family:var(--serif);font-size:12px;letter-spacing:.3em;color:var(--gray)}
-.blank-card h3{font-family:var(--serif);font-size:24px;margin:14px 0 8px;color:var(--cream-60);letter-spacing:.06em}
-.blank-card p{font-size:13px;color:var(--cream-40);letter-spacing:.1em}
-.blank-card .b-line{width:44px;height:1px;background:var(--gray);margin:16px auto}
 
 /* ============ 关于 ============ */
 .about{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -392,15 +402,17 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   .hero-fig{height:18vh}
   .intro{padding:110px 7vw 100px}
   .works-grid{grid-template-columns:1fr}
+  .drama-grid.d3{grid-template-columns:1fr}
+  .drama-grid.d4{grid-template-columns:repeat(2,1fr)}
   .ecom-grid{grid-template-columns:repeat(2,1fr)}
   .ecom-card.wide{grid-column:auto}
   .about-grid{grid-template-columns:1fr;gap:32px}
   .tracks{grid-template-columns:1fr}
-  .blank-row{grid-template-columns:1fr}
 }
 @media (max-width:520px){
   section{padding:72px 6vw}
   .ecom-grid{grid-template-columns:1fr}
+  .drama-grid.d4{grid-template-columns:1fr}
   .hero{height:auto;min-height:100svh}
   .hands-wrap{top:0;width:112%}
   .hero-fig{height:16vh}
@@ -428,6 +440,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   <div class="nav-logo">叙 · 视觉叙事</div>
   <div class="nav-links" id="navLinks">
     <a href="#works">作品</a>
+    <a href="#drama">长片</a>
     <a href="#tvc">TVC 广告</a>
     <a href="#ecom">电商视觉</a>
     <a href="#about">关于</a>
@@ -522,17 +535,100 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
           <p>开屏引导、主图 Banner、详情页、闪屏 —— 转化导向的视觉体系</p>
           <div class="t-status">4 品类 · 点击进入</div>
         </a>
-        <div class="track soon reveal d3">
+        <a class="track reveal d3" href="#drama">
           <span class="t-no">TRACK 03</span>
           <h3>AIGC 真人剧</h3>
-          <p>剧情短片与真人剧集，筹备中</p>
-          <div class="t-status">即将上线</div>
-        </div>
-        <div class="track soon reveal d3">
+          <p>《道士下山》· 丧尸末世真人短剧，3 集连播</p>
+          <div class="t-status">3 集 · 点击进入</div>
+        </a>
+        <a class="track reveal d3" href="#drama">
           <span class="t-no">TRACK 04</span>
-          <h3>AIG 漫剧</h3>
-          <p>AI 动漫与漫剧创作，筹备中</p>
-          <div class="t-status">即将上线</div>
+          <h3>AIGC 漫剧</h3>
+          <p>《归零纪元》· 科幻末世 3D 漫剧，含主题曲</p>
+          <div class="t-status">3 集 + MV · 点击进入</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 叙事长片：AIGC 真人剧 / AIGC 漫剧 ===== -->
+  <section id="drama" style="border-top:1px solid var(--line)">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-num">02 · 03 · 叙事长片</span>
+        <h2 class="sec-title">真人剧与漫剧，双线并行</h2>
+        <p class="sec-desc">AI 生成的剧情真人剧与 3D 漫剧，点击封面跳转抖音观看完整剧集。</p>
+      </div>
+      <div class="drama-block reveal">
+        <div class="d-block-head">
+          <span class="d-block-no">TRACK 03 · AIGC 真人剧</span>
+          <h3 class="d-block-title">《道士下山》</h3>
+        </div>
+        <div class="drama-grid d3">
+          <a class="drama-card reveal d1" href="https://v.douyin.com/kn9TPhLubQY/" target="_blank" rel="noopener" aria-label="观看道士下山第一集">
+            <div class="d-media"><img src="https://aka.doubaocdn.com/s/9h1ZEUyVY1" alt="道士下山第一集封面" loading="lazy"></div>
+            <div class="d-meta">
+              <span class="d-kind">AIGC 真人剧 · 第一集</span>
+              <h3>当道士遇上丧尸</h3>
+              <p class="d-sub">玄尘下山 · 丧尸末世</p>
+            </div>
+          </a>
+          <a class="drama-card reveal d2" href="https://v.douyin.com/SzvkWSbhTpk/" target="_blank" rel="noopener" aria-label="观看道士下山第二集">
+            <div class="d-media"><img src="https://aka.doubaocdn.com/s/9h1ZEUyVY1" alt="道士下山第二集封面" loading="lazy"></div>
+            <div class="d-meta">
+              <span class="d-kind">AIGC 真人剧 · 第二集</span>
+              <h3>当道士遇上丧尸</h3>
+              <p class="d-sub">玄尘下山 · 丧尸末世</p>
+            </div>
+          </a>
+          <a class="drama-card reveal d3" href="https://v.douyin.com/w6M-F8QOxIo/" target="_blank" rel="noopener" aria-label="观看道士下山第三集">
+            <div class="d-media"><img src="https://aka.doubaocdn.com/s/9h1ZEUyVY1" alt="道士下山第三集封面" loading="lazy"></div>
+            <div class="d-meta">
+              <span class="d-kind">AIGC 真人剧 · 第三集</span>
+              <h3>当道士遇上丧尸</h3>
+              <p class="d-sub">玄尘下山 · 丧尸末世</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="drama-block reveal">
+        <div class="d-block-head">
+          <span class="d-block-no">TRACK 04 · AIGC 漫剧</span>
+          <h3 class="d-block-title">《归零纪元》</h3>
+        </div>
+        <div class="drama-grid d4">
+          <a class="drama-card reveal d1" href="https://v.douyin.com/KH45VkuECn4/" target="_blank" rel="noopener" aria-label="观看归零纪元第一集">
+            <div class="d-media"><img src="https://aka.doubaocdn.com/s/eqYjFWGAgM" alt="归零纪元第一集苍穹之下封面" loading="lazy"></div>
+            <div class="d-meta">
+              <span class="d-kind">AIGC 漫剧 · 第一集</span>
+              <h3>苍穹之下</h3>
+              <p class="d-sub">穹顶之下 · 末世启幕</p>
+            </div>
+          </a>
+          <a class="drama-card reveal d2" href="https://v.douyin.com/Tt5LqSWkHxs/" target="_blank" rel="noopener" aria-label="观看归零纪元第二集">
+            <div class="d-media"><img src="https://aka.doubaocdn.com/s/Boh0omxhVw" alt="归零纪元第二集方舟封面" loading="lazy"></div>
+            <div class="d-meta">
+              <span class="d-kind">AIGC 漫剧 · 第二集</span>
+              <h3>方舟</h3>
+              <p class="d-sub">方舟起航 · 文明延续</p>
+            </div>
+          </a>
+          <a class="drama-card reveal d3" href="https://v.douyin.com/fgJKVvFAsSw/" target="_blank" rel="noopener" aria-label="观看归零纪元第三集">
+            <div class="d-media"><img src="https://aka.doubaocdn.com/s/Boh0omxhVw" alt="归零纪元第三集出城封面" loading="lazy"></div>
+            <div class="d-meta">
+              <span class="d-kind">AIGC 漫剧 · 第三集</span>
+              <h3>出城</h3>
+              <p class="d-sub">出城之路 · 废墟寻光</p>
+            </div>
+          </a>
+          <a class="drama-card reveal d3" href="https://v.douyin.com/Z3zHLgJVUdI/" target="_blank" rel="noopener" aria-label="观看归零纪元主题曲风撞脉搏">
+            <div class="d-media"><img src="https://aka.doubaocdn.com/s/eTZiK3oHUH" alt="归零纪元主题曲风撞脉搏封面" loading="lazy"></div>
+            <div class="d-meta">
+              <span class="d-kind">AIGC 漫剧 · 主题曲</span>
+              <h3>风撞脉搏</h3>
+              <p class="d-sub">废墟之上 · 人类不灭</p>
+            </div>
+          </a>
         </div>
       </div>
     </div>
@@ -542,7 +638,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   <section id="tvc" style="border-top:1px solid var(--line)">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="sec-num">02 · TVC 广告</span>
+        <span class="sec-num">04 · TVC 广告</span>
         <h2 class="sec-title">三十秒，讲完一个故事</h2>
         <p class="sec-desc">每支 TVC 均由 AI 完成创意策划、分镜设计与视频生成。点击封面播放成片。</p>
       </div>
@@ -607,7 +703,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   <section id="ecom" style="border-top:1px solid var(--line)">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="sec-num">03 · 电商视觉</span>
+        <span class="sec-num">05 · 电商视觉</span>
         <h2 class="sec-title">让点击，变成下单</h2>
         <p class="sec-desc">覆盖用户从看到到购买的全链路视觉：开屏引导、主图 Banner、详情页与闪屏。</p>
       </div>
@@ -667,31 +763,6 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
           <div class="e-media"><img src="https://aka.doubaocdn.com/s/ArnV6KW87R" alt="今日好价运动专场闪屏页" loading="lazy"></div>
           <figcaption class="e-meta"><div class="e-name">今日好价 · 运动专场闪屏</div><div class="e-sub">闪屏页 · 电商引导系列</div></figcaption>
         </figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 留空区：真人剧 / 漫剧 ===== -->
-  <section id="blank" style="border-top:1px solid var(--line)">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="sec-num">04 · 05 · 叙事长片</span>
-        <h2 class="sec-title">正在筹备的两个世界</h2>
-        <p class="sec-desc">剧情真人剧与 AI 漫剧板块已预留位置，作品即将到来。</p>
-      </div>
-      <div class="blank-row">
-        <div class="blank-card reveal d1">
-          <span class="b-no">TRACK 03</span>
-          <h3>AIGC 真人剧</h3>
-          <div class="b-line"></div>
-          <p>筹备中 · 敬请期待</p>
-        </div>
-        <div class="blank-card reveal d2">
-          <span class="b-no">TRACK 04</span>
-          <h3>AIG 漫剧</h3>
-          <div class="b-line"></div>
-          <p>筹备中 · 敬请期待</p>
-        </div>
       </div>
     </div>
   </section>

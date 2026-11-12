@@ -1,0 +1,208 @@
+{
+ "total": 50,
+ "ok_count": 50,
+ "fail_count": 0,
+ "ok": [
+  {
+   "file": "hero-hands.webp",
+   "bytes": 62026
+  },
+  {
+   "file": "hero-stage.webp",
+   "bytes": 33914
+  },
+  {
+   "file": "hero-fig-linchuan.webp",
+   "bytes": 65824
+  },
+  {
+   "file": "hero-fig-xiaoman.webp",
+   "bytes": 60794
+  },
+  {
+   "file": "hero-fig-xuanchen.webp",
+   "bytes": 79980
+  },
+  {
+   "file": "hero-fig-boss.webp",
+   "bytes": 62942
+  },
+  {
+   "file": "hero-fig-alan.webp",
+   "bytes": 49600
+  },
+  {
+   "file": "drama-daoshi-cover.webp",
+   "bytes": 268884
+  },
+  {
+   "file": "drama-zero-ep1.webp",
+   "bytes": 209208
+  },
+  {
+   "file": "drama-zero-ep2.webp",
+   "bytes": 209208
+  },
+  {
+   "file": "drama-zero-song.webp",
+   "bytes": 182606
+  },
+  {
+   "file": "tvc-pet-cover.jpg",
+   "bytes": 54219
+  },
+  {
+   "file": "tvc-sofa-cover.jpg",
+   "bytes": 58758
+  },
+  {
+   "file": "tvc-viewarm-cover.jpg",
+   "bytes": 22441
+  },
+  {
+   "file": "tvc-qingyou-cover.webp",
+   "bytes": 41722
+  },
+  {
+   "file": "tvc-pet.mp4",
+   "bytes": 7564211
+  },
+  {
+   "file": "tvc-sofa.mp4",
+   "bytes": 10667059
+  },
+  {
+   "file": "tvc-viewarm.mp4",
+   "bytes": 6248915
+  },
+  {
+   "file": "tvc-qingyou.mp4",
+   "bytes": 4722752
+  },
+  {
+   "file": "splash-car-1.webp",
+   "bytes": 55300
+  },
+  {
+   "file": "splash-car-2.webp",
+   "bytes": 53662
+  },
+  {
+   "file": "splash-car-3.webp",
+   "bytes": 52836
+  },
+  {
+   "file": "splash-live-1.webp",
+   "bytes": 112312
+  },
+  {
+   "file": "splash-live-2.webp",
+   "bytes": 102792
+  },
+  {
+   "file": "splash-live-3.webp",
+   "bytes": 107304
+  },
+  {
+   "file": "splash-date-1.webp",
+   "bytes": 75242
+  },
+  {
+   "file": "splash-date-2.webp",
+   "bytes": 75596
+  },
+  {
+   "file": "splash-date-3.webp",
+   "bytes": 64544
+  },
+  {
+   "file": "ecom-pour-over-main.webp",
+   "bytes": 81926
+  },
+  {
+   "file": "ecom-pour-over-banner.webp",
+   "bytes": 46576
+  },
+  {
+   "file": "ecom-qianshi-main.webp",
+   "bytes": 135832
+  },
+  {
+   "file": "ecom-qianshi-banner.webp",
+   "bytes": 40842
+  },
+  {
+   "file": "ecom-lamp-main.webp",
+   "bytes": 31116
+  },
+  {
+   "file": "ecom-lamp-banner.webp",
+   "bytes": 51590
+  },
+  {
+   "file": "detail-cat-main.webp",
+   "bytes": 181636
+  },
+  {
+   "file": "detail-cat-long.jpg",
+   "bytes": 628071
+  },
+  {
+   "file": "detail-tea-1.webp",
+   "bytes": 194990
+  },
+  {
+   "file": "detail-tea-2.webp",
+   "bytes": 151980
+  },
+  {
+   "file": "detail-tea-3.webp",
+   "bytes": 64966
+  },
+  {
+   "file": "detail-tea-4.webp",
+   "bytes": 108956
+  },
+  {
+   "file": "detail-tea-5.webp",
+   "bytes": 73860
+  },
+  {
+   "file": "detail-tea-6.webp",
+   "bytes": 81644
+  },
+  {
+   "file": "detail-tea-7.webp",
+   "bytes": 54182
+  },
+  {
+   "file": "detail-tea-8.webp",
+   "bytes": 51502
+  },
+  {
+   "file": "detail-tea-long.jpg",
+   "bytes": 730302
+  },
+  {
+   "file": "detail-sun-main.webp",
+   "bytes": 213736
+  },
+  {
+   "file": "detail-sun-long.jpg",
+   "bytes": 863640
+  },
+  {
+   "file": "flash-1.webp",
+   "bytes": 90498
+  },
+  {
+   "file": "flash-2.webp",
+   "bytes": 158070
+  },
+  {
+   "file": "flash-3.webp",
+   "bytes": 101388
+  }
+ ],
+ "fail": []
+}

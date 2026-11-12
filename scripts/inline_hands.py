@@ -82,7 +82,7 @@ def main():
         mime = {"webp": "image/webp", "jpg": "image/jpeg", "jpeg": "image/jpeg",
                 "png": "image/png"}.get(STAGE_FILE.suffix.lstrip(".").lower(), "image/webp")
         suri = "data:%s;base64,%s" % (mime, base64.b64encode(STAGE_FILE.read_bytes()).decode("ascii"))
-        pat = re.compile(r"url\((['\"]?)" + re.escape(PREFIX + STAGE_ID) + r"\1)")
+        pat = re.compile(r"url\((['\"]?)" + re.escape(PREFIX + STAGE_ID) + r"\1\)")
         text, n = pat.subn("url(%s)" % suri, text)
         stage_note = "背景内联" if n else "背景未命中"
 

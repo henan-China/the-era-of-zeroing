@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""把 index.html 中已失效的豆包临时 CDN 链接改写为站内 assets/ 相对路径。幂等。"""
+"""把 index.html 中已失效的豆包临时 CDN 链接改写为站内 assets/ 相对路径；并统一 TRACK 编号。幂等。"""
 import io, os, re
 
 MAP = {
@@ -55,6 +55,11 @@ MAP = {
  "ArnV6KW87R": "flash-3.webp",
 }
 
+# 四条叙事线的赛道编号：漫剧 01、真人剧 02、TVC 03、电商 04
+TRACK_BY_TITLE = {"TVC 广告": "03", "电商视觉": "04",
+                  "AIGC 真人剧": "02", "AIGC 漫剧": "01"}
+BLOCK_BY_NAME = {"AIGC 真人剧": "02", "AIGC 漫剧": "01"}
+
 HTML = "index.html"
 probe = os.path.join("assets", "_probe.png")
 if os.path.isfile(probe):
@@ -76,6 +81,29 @@ def repl(m):
 
 out = re.sub(r"https://aka\.doubaocdn\.com/s/([A-Za-z0-9]+)", repl, html)
 
+
+def fix_tracks(s):
+    def r1(m):
+        title = m.group(2).strip()
+        num = TRACK_BY_TITLE.get(title)
+        if not num:
+            return m.group(0)
+        return '<span class="t-no">TRACK %s</span>%s<h3>%s</h3>' % (num, m.group(1), title)
+
+    def r2(m):
+        name = m.group(1).strip()
+        num = BLOCK_BY_NAME.get(name)
+        if not num:
+            return m.group(0)
+        return '<span class="d-block-no">TRACK %s · %s</span>' % (num, name)
+
+    s = re.sub(r'<span class="t-no">TRACK \d+</span>(\s*)<h3>([^<]+)</h3>', r1, s)
+    s = re.sub(r'<span class="d-block-no">TRACK \d+ · ([^<]+)</span>', r2, s)
+    return s
+
+
+out = fix_tracks(out)
+
 if out != html:
     io.open(HTML, "w", encoding="utf-8").write(out)
     print("html rewritten, %d unique codes mapped" % len(used))
@@ -88,3 +116,4 @@ if unknown:
 if missing:
     print("codes in map but absent from html:", missing)
 print("remaining aka refs:", len(re.findall(r"aka\.doubaocdn\.com", out)))
+print("track markers:", re.findall(r'TRACK \d+', out))

@@ -5,11 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>视觉叙事 · AIGC 作品集</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230A0E1F'/%3E%3Ccircle cx='26' cy='30' r='12' fill='none' stroke='%2308FDDD' stroke-width='3'/%3E%3Cpath d='M36 40 L48 52' stroke='%2308FDDD' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="preconnect" href="https://miaoda.feishu.cn" crossorigin>
 <link rel="preconnect" href="https://p3-flow-sign.byteimg.com" crossorigin>
 <link rel="preconnect" href="https://media.doubao.com" crossorigin>
 <link rel="preload" as="style" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700&amp;family=Noto+Sans+SC:wght@400;500&amp;display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700&amp;family=Noto+Sans+SC:wght@400;500&amp;display=swap"></noscript>
+<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/LUrVbS7Ygo9EWXxpc5ncZkbYnhS">
+<!-- 首屏六张 Hero 素材提前并发拉取，不等 body 解析完 -->
+<link rel="preload" as="image" href="https://aka.doubaocdn.com/s/DQHb26kgbw" fetchpriority="high">
+<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/NMMSbDWhCo70NOxZVAcc6mdlnDw">
+<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/CgFgbHyZzoaPh1xOUHbcAc8pnde">
+<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/EvHBbUAinogQZcxZU3UcMg4Znnc">
+<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Lj2wb4Fa3oZrOvx5eRxcj35snnf">
+<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/IlK8bZ84Sojoy9xtJCzcCGjGn8g">
 <style>
 /* ============ 基础与变量 ============ */
 :root{
@@ -151,13 +159,13 @@ button{font-family:inherit;cursor:pointer}
 @keyframes structureSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 /* 双手模型：浮于舞台顶部，放大至近全宽，指尖牵引丝线 */
 .hands-wrap{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:min(1320px,94%);z-index:4;pointer-events:none;
+  position:absolute;top:1%;left:50%;transform:translateX(-50%);
+  width:min(1080px,76%);z-index:4;pointer-events:none;
   opacity:0;transition:opacity .5s ease .1s;
 }
 .hero-stage.in .hands-wrap{opacity:1}
 .hero-stage.active .hands-wrap{opacity:1}
-.hands-wrap img{width:100%;height:auto;filter:drop-shadow(0 26px 50px rgba(0,0,0,.5)) drop-shadow(0 6px 16px rgba(0,0,0,.35)) drop-shadow(0 0 26px rgba(8,243,221,.22));animation:handsFloat 5.5s ease-in-out infinite}
+.hands-wrap img{width:100%;height:auto;filter:brightness(.88) saturate(.72) drop-shadow(0 26px 50px rgba(0,0,0,.5)) drop-shadow(0 6px 16px rgba(0,0,0,.35)) drop-shadow(0 0 26px rgba(8,243,221,.22));animation:handsFloat 5.5s ease-in-out infinite}
 @keyframes handsFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 /* 丝线：连接手指的贝塞尔曲线，随手动从上到下摆动 */
 .stage-strings{
@@ -409,7 +417,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   .nav-links.open a{color:var(--cream-60)}
   .nav-links.open a:hover,.nav-links.open a.active{color:var(--gold)}
   .hero{height:auto;min-height:100vh}
-  .hands-wrap{top:0;width:108%}
+  .hands-wrap{top:2%;width:104%}
   .hero-fig{height:18vh}
   .intro{padding:110px 7vw 100px}
   .works-grid{grid-template-columns:1fr}
@@ -425,7 +433,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   .ecom-grid{grid-template-columns:1fr}
   .drama-grid.d4{grid-template-columns:1fr}
   .hero{height:auto;min-height:100svh}
-  .hands-wrap{top:0;width:112%}
+  .hands-wrap{top:3%;width:108%}
   .hero-fig{height:16vh}
   .intro{padding:96px 7vw 88px}
   .intro-title{font-size:clamp(32px,9vw,44px)}
@@ -442,14 +450,6 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   .particle{opacity:.6}
 }
 </style>
-<!-- 首屏 Hero 素材预加载 -->
-<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/LUrVbS7Ygo9EWXxpc5ncZkbYnhS">
-<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Gr8PbAuqposqmfx3koqcQz4Kny3" fetchpriority="high">
-<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/NMMSbDWhCo70NOxZVAcc6mdlnDw">
-<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/CgFgbHyZzoaPh1xOUHbcAc8pnde">
-<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/EvHBbUAinogQZcxZU3UcMg4Znnc">
-<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Lj2wb4Fa3oZrOvx5eRxcj35snnf">
-<link rel="preload" as="image" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/IlK8bZ84Sojoy9xtJCzcCGjGn8g">
 </head>
 <body>
 <div id="progress"></div>
@@ -487,7 +487,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
       <line x1="92" y1="8" x2="8" y2="92"/>
     </svg>
     <div class="hands-wrap" id="handsWrap">
-      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Gr8PbAuqposqmfx3koqcQz4Kny3" alt="操控丝线的双手模型" onerror="this.onerror=null;this.src='assets/hero-hands.webp'">
+      <img src="https://aka.doubaocdn.com/s/DQHb26kgbw" alt="操控丝线的双手模型" onerror="this.onerror=null;this.src='assets/hero-hands-white.webp'">
     </div>
     <svg class="stage-strings" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       <defs>
@@ -496,11 +496,11 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
           <stop offset="1" stop-color="rgba(170,225,255,.45)"/>
         </linearGradient>
       </defs>
-      <path class="ss" d="M37.7 28.5 C 38.6 44, 37.3 58, 37 68"/>
-      <path class="ss" d="M42.3 21.6 C 42.2 38, 43.1 55, 43.5 68"/>
-      <path class="ss" d="M55.8 22 C 54.6 38, 50.9 55, 50 68"/>
-      <path class="ss" d="M63.1 25.2 C 62.4 40, 57.6 56, 56.5 68"/>
-      <path class="ss" d="M67 19.2 C 66.2 36, 64 55, 63 68"/>
+      <path class="ss" d="M28.3 34.4 C 28.3 48.5, 28.3 60.6, 37 68"/>
+      <path class="ss" d="M35.0 33.3 C 35.0 47.9, 35.0 60.4, 43.5 68"/>
+      <path class="ss" d="M50.2 27.0 C 50.2 44.2, 50.2 59.0, 50 68"/>
+      <path class="ss" d="M63.1 33.3 C 63.1 47.9, 63.1 60.4, 56.5 68"/>
+      <path class="ss" d="M70.1 35.0 C 70.1 48.8, 70.1 60.7, 63 68"/>
     </svg>
     <span class="string-dot" style="left:37%;top:68%"></span>
     <span class="string-dot" style="left:43.5%;top:68%"></span>
@@ -987,24 +987,29 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
   var figures = document.querySelectorAll(".hero-fig");
   var handsWrap = document.getElementById("handsWrap");
   // 手指在图片内的相对位置（x 比例 / 指尖 y 比例）
+  // 按 white model hands v6（3127×1340）实测指尖坐标标定，丝线起点贴合指尖
   var fingerBase = [
-    {fx:0.369, fyv:0.570},
-    {fx:0.419, fyv:0.432},
-    {fx:0.562, fyv:0.440},
-    {fx:0.639, fyv:0.503},
-    {fx:0.681, fyv:0.384}
+    {fx:0.214, fyv:0.902},
+    {fx:0.303, fyv:0.871},
+    {fx:0.503, fyv:0.700},
+    {fx:0.673, fyv:0.871},
+    {fx:0.765, fyv:0.916}
   ];
-  var hm = {topPct:1, wPct:80, hPct:45};
+  var hm = {topPct:1, wPct:76, hPct:37};
   // 五个人偶的落点（画面宽度百分比）：与指尖解耦，保持均分间距
   var endBase = [37, 43.5, 50, 56.5, 63];
   function updateHandMetrics(){
     if(!handsWrap) return;
     var r = handsWrap.getBoundingClientRect();
     var hr = hero.getBoundingClientRect();
+    var iw = window.innerWidth || document.documentElement.clientWidth || 0;
+    var ih = window.innerHeight || document.documentElement.clientHeight || 0;
+    // 图片未就绪（宽/高为 0）时保留上一帧几何，避免首帧算出无效坐标
+    if(!isFinite(r.width) || !isFinite(r.height) || r.width < 1 || r.height < 1 || iw < 1 || ih < 1) return;
     // 用 Hero 内相对坐标：页面滚动时丝线长度与位置保持不变
-    hm.topPct = (r.top - hr.top) / window.innerHeight * 100;
-    hm.wPct = r.width / window.innerWidth * 100;
-    hm.hPct = r.height / window.innerHeight * 100;
+    hm.topPct = (r.top - hr.top) / ih * 100;
+    hm.wPct = r.width / iw * 100;
+    hm.hPct = r.height / ih * 100;
   }
   /* 角色手办悬挂高度：桌面 20vh / 平板 18vh / 手机 16vh */
   function figHeight(){
@@ -1031,6 +1036,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         var b = fingerBase[i];
         var sx = 50 - hm.wPct / 2 + b.fx * hm.wPct + shiftPct;
         var sy = hm.topPct + hm.hPct * b.fyv;
+        if(!isFinite(sy)){ sy = hm.topPct; }
         var phase = sway + i * .7;
         // 鼠标分区：靠近哪条线，哪条线被激活（振幅小幅增强 + 向鼠标轻微牵引）
         var dist = Math.abs(curXPct - sx);
@@ -1041,6 +1047,7 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         var w2 = Math.sin(phase + 1.1) * 1.1 * boost + pertPct * .6;
         var w3 = Math.sin(phase + 2.0) * 1.5 * boost + pertPct * .8;
         var ex = endBase[i] + w3 * .6 + act * (curXPct - endBase[i]) * .18;
+        if(!isFinite(ex)) ex = endBase[i];
         // 手办悬挂高度：与指尖解耦，脚下落在舞台下沿（任何窗口尺寸一致）
         var eyBase = 90 - fhNow * 1.1;
         if(eyBase < sy + 12){ eyBase = sy + 12; }
@@ -1051,12 +1058,12 @@ footer{border-top:1px solid var(--line);padding:34px 5vw;display:flex;justify-co
         // 角色位置缓动滞后于线末端：重物慢半拍
         // 首帧直接落在目标位（避免开场五个人偶叠在画面中央再散开）
         var fs = figState[i];
-        if(fs.x === null){ fs.x = ex; fs.y = ey; }
+        if(fs.x === null || !isFinite(fs.x) || !isFinite(fs.y)){ fs.x = ex; fs.y = ey; }
         else { fs.x += (ex - fs.x) * .10; fs.y += (ey - fs.y) * .10; }
         // 丝线终点跟随角色实际位置，保持线始终连着手办
         p.setAttribute("d", "M" + sx.toFixed(2) + " " + sy.toFixed(2) +
-          " C " + (sx + w1).toFixed(2) + " " + c1y.toFixed(2) +
-          ", " + (sx + w2).toFixed(2) + " " + c2y.toFixed(2) +
+          " C " + (sx + w1 + (fs.x - sx) * .22).toFixed(2) + " " + c1y.toFixed(2) +
+          ", " + (sx + w2 + (fs.x - sx) * .55).toFixed(2) + " " + c2y.toFixed(2) +
           ", " + fs.x.toFixed(2) + " " + fs.y.toFixed(2));
         if(act > .55){ p.style.stroke = "rgba(255,255,255,.95)"; } else { p.style.stroke = ""; }
         if(stringDots[i]){

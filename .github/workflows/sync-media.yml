@@ -23,6 +23,9 @@ jobs:
       - name: Hero fix (strings anchor + entrance timing)
         run: python3 scripts/hero_fix.py
 
+      - name: Inline hero hands (no expiring CDN link)
+        run: python3 scripts/inline_hands.py
+
       - name: Commit html
         if: always()
         run: |

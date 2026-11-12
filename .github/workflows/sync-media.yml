@@ -20,6 +20,9 @@ jobs:
       - name: Rewrite html (CDN refs + track numbers)
         run: python3 scripts/rewrite_html.py
 
+      - name: Hero fix (strings anchor + entrance timing)
+        run: python3 scripts/hero_fix.py
+
       - name: Commit html
         if: always()
         run: |

@@ -13,7 +13,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 T = ROOT / "index.html"
 ASSET = ROOT / "assets" / "hero-hands-white.webp"
 
+PREFIX = "https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/"
 STAGE_ID = "LUrVbS7Ygo9EWXxpc5ncZkbYnhS"
+STAGE_FILE = next((ROOT / "assets" / "media").glob(STAGE_ID + ".*"), None)
 IMG_RE = re.compile(r'(<img src=")([^"]*)(" alt="操控丝线的双手模型")')
 PRELOAD_RE = re.compile(r'\n?<link rel="preload" as="image" href="([^"]+)"[^>]*>')
 # 预加载块注释（两种措辞都用正则收，避免逐字比对漏掉造成累积）
@@ -43,6 +45,8 @@ def main():
             urls.append(u)
     stage = next((u for u in urls if u.endswith(STAGE_ID)), None)
     figs = [u for u in urls if not u.endswith(STAGE_ID)]
+    if stage and STAGE_FILE is not None:
+        stage = None  # 舞台背景改为内联，不再需要外链预加载
 
     # 2) 收掉所有图片预加载行与块注释
     head = PRELOAD_RE.sub("", head)
@@ -71,13 +75,24 @@ def main():
         return m.group(1) + uri + m.group(3)
 
     text = IMG_RE.sub(swap, text)
+
+    # 5) 舞台背景（CSS background）也内联，避免成为唯一没有兜底的外链图片
+    stage_note = "背景外链"
+    if STAGE_FILE is not None and STAGE_FILE.stat().st_size > 0:
+        mime = {"webp": "image/webp", "jpg": "image/jpeg", "jpeg": "image/jpeg",
+                "png": "image/png"}.get(STAGE_FILE.suffix.lstrip(".").lower(), "image/webp")
+        suri = "data:%s;base64,%s" % (mime, base64.b64encode(STAGE_FILE.read_bytes()).decode("ascii"))
+        pat = re.compile(r"url\((['\"]?)" + re.escape(PREFIX + STAGE_ID) + r"\1)")
+        text, n = pat.subn("url(%s)" % suri, text)
+        stage_note = "背景内联" if n else "背景未命中"
+
     if text == orig:
         print("inline: 已内联，跳过")
         return
     T.write_text(text, encoding="utf-8")
-    print("inline: 素材 %d bytes；index.html %d → %d 字节；预加载 %d 条（含 stage）"
+    print("inline: 素材 %d bytes；index.html %d → %d 字节；预加载 %d 条；%s"
           % (len(ASSET.read_bytes()), len(orig.encode("utf-8")), len(text.encode("utf-8")),
-             (1 if stage else 0) + len(figs)))
+             (1 if stage else 0) + len(figs), stage_note))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
-"""把 index.html 中已失效的豆包临时 CDN 链接改写为站内 assets/ 相对路径；并统一 TRACK 编号。幂等。"""
+"""index.html 资源处理：
+1) 把历史上失效的豆包临时 CDN 短链改写为站内 assets/ 路径；
+2) 把 assets/ 引用切换到 raw.githubusercontent CDN 绝对地址（国内下载比 Pages 快约 50 倍）；
+3) 为 img / video 增加回落到 assets/ 本地路径的兜底；
+4) 统一四条叙事线的 TRACK 编号。
+幂等：重复运行不改变结果。
+"""
 import io, os, re
+
+CDN = "https://raw.githubusercontent.com/henan-China/the-era-of-zeroing/main/assets/"
 
 MAP = {
  "qTu0VStiMH": "hero-stage.webp",
@@ -55,10 +63,29 @@ MAP = {
  "ArnV6KW87R": "flash-3.webp",
 }
 
-# 四条叙事线的赛道编号：漫剧 01、真人剧 02、TVC 03、电商 04
 TRACK_BY_TITLE = {"TVC 广告": "03", "电商视觉": "04",
                   "AIGC 真人剧": "02", "AIGC 漫剧": "01"}
 BLOCK_BY_NAME = {"AIGC 真人剧": "02", "AIGC 漫剧": "01"}
+
+OLD_VIDEO_ERROR = """    video.addEventListener("error", function(){
+      if(started) return;
+      started = true;
+      loading.classList.remove("show");
+      showToast("视频加载失败，请检查网络后重试");
+    });"""
+
+NEW_VIDEO_ERROR = """    video.addEventListener("error", function(){
+      if(!video.dataset.fallback && (video.currentSrc || video.src).indexOf("raw.githubusercontent.com") >= 0){
+        video.dataset.fallback = "1";
+        video.src = "assets/" + url.split("/").pop();
+        video.load();
+        return;
+      }
+      if(started) return;
+      started = true;
+      loading.classList.remove("show");
+      showToast("视频加载失败，请检查网络后重试");
+    });"""
 
 HTML = "index.html"
 probe = os.path.join("assets", "_probe.png")
@@ -80,6 +107,34 @@ def repl(m):
 
 
 out = re.sub(r"https://aka\.doubaocdn\.com/s/([A-Za-z0-9]+)", repl, html)
+
+
+def add_img_fallback(s):
+    def one(m):
+        tag = m.group(0)
+        name = m.group(1)
+        if "onerror" in tag:
+            return tag
+        return tag[:-1] + " onerror=\"this.onerror=null;this.src='assets/%s'\"" % name
+
+    return re.sub(r'<img [^>]*src="%s([A-Za-z0-9._-]+)"[^>]*>' % re.escape(CDN), one, s)
+
+
+def to_cdn(s):
+    if "raw.githubusercontent.com" in s:
+        return add_img_fallback(s)
+    s = s.replace("assets/", CDN)
+    return add_img_fallback(s)
+
+
+out = to_cdn(out)
+
+if OLD_VIDEO_ERROR in out:
+    out = out.replace(OLD_VIDEO_ERROR, NEW_VIDEO_ERROR)
+    print("video fallback handler patched")
+
+if 'showToast("视频加载失败' in out and "video.dataset.fallback" not in out:
+    print("WARN: video error handler not patched (source text changed)")
 
 
 def fix_tracks(s):
@@ -106,7 +161,7 @@ out = fix_tracks(out)
 
 if out != html:
     io.open(HTML, "w", encoding="utf-8").write(out)
-    print("html rewritten, %d unique codes mapped" % len(used))
+    print("html rewritten")
 else:
     print("html unchanged")
 
@@ -115,5 +170,7 @@ if unknown:
     print("UNMAPPED codes:", sorted(unknown))
 if missing:
     print("codes in map but absent from html:", missing)
-print("remaining aka refs:", len(re.findall(r"aka\.doubaocdn\.com", out)))
-print("track markers:", re.findall(r'TRACK \d+', out))
+print("local assets refs:", out.count('src="assets/') + out.count("data-video=\"assets/"))
+print("cdn refs:", out.count(CDN))
+print("img fallbacks:", out.count("this.onerror=null"))
+print("track markers:", re.findall(r"TRACK \d+", out))

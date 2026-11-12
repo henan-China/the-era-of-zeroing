@@ -115,9 +115,14 @@ def add_img_fallback(s):
         name = m.group(1)
         if "onerror" in tag:
             return tag
-        return tag[:-1] + " onerror=\"this.onerror=null;this.src='assets/%s'\"" % name
+        return tag[:-1] + " onerror=\"this.onerror=null;this.src='assets/%s'\">" % name
 
     return re.sub(r'<img [^>]*src="%s([A-Za-z0-9._-]+)"[^>]*>' % re.escape(CDN), one, s)
+
+
+def close_img_tags(s):
+    """修复历史上因加兜底属性而丢失标签结尾 > 的 img（幂等）"""
+    return re.sub(r'(onerror="this\.onerror=null;this\.src=\'[^\']*\'")(?!\s*>)', r'\1>', s)
 
 
 def to_cdn(s):
@@ -127,7 +132,7 @@ def to_cdn(s):
     return add_img_fallback(s)
 
 
-out = to_cdn(out)
+out = close_img_tags(to_cdn(out))
 
 if OLD_VIDEO_ERROR in out:
     out = out.replace(OLD_VIDEO_ERROR, NEW_VIDEO_ERROR)
